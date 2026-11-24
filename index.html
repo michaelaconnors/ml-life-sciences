@@ -74,36 +74,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -127,6 +101,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./concept-map.html"> 
+<span class="menu-text">Concept Map</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
@@ -169,9 +147,37 @@ window.Quarto = {
 </header>
 
 
-<p>Predicting disease from data: <span class="math inline">\(\hat{\mathbf y} = X\mathbf w + b\mathbf 1\)</span></p>
-<p>This is a Quarto website.</p>
-<p>To learn more about Quarto websites visit <a href="https://quarto.org/docs/websites" class="uri">https://quarto.org/docs/websites</a>.</p>
+<p>Machine learning in biology is a set of choices: what kind of task you have, what model you use, and how you train and evaluate it. This site maps them out, then walks through each one on real biological data.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">flowchart TD
+  ML["What does your training data look like?"]
+  ML --&gt; S["&lt;b&gt;Supervised&lt;/b&gt;&lt;br/&gt;inputs + answers"]
+  ML --&gt; U["&lt;b&gt;Unsupervised&lt;/b&gt;&lt;br/&gt;inputs only"]
+  ML --&gt; SS["&lt;b&gt;Self-supervised&lt;/b&gt;&lt;br/&gt;model hides &amp; predicts parts of input"]
+  ML --&gt; SEMI["&lt;b&gt;Semi-supervised&lt;/b&gt;&lt;br/&gt;few answers, many unlabeled"]
+  ML --&gt; RL["&lt;b&gt;Reinforcement&lt;/b&gt;&lt;br/&gt;actions + rewards"]
+  S --&gt; R["Regression&lt;br/&gt;&lt;i&gt;disease progression&lt;/i&gt;"]
+  S --&gt; C["Classification&lt;br/&gt;&lt;i&gt;tumor malignancy&lt;/i&gt;"]
+  S --&gt; SV["Time-to-event&lt;br/&gt;&lt;i&gt;patient survival&lt;/i&gt;"]
+  S --&gt; SL["Sequence labeling&lt;br/&gt;&lt;i&gt;per-residue structure&lt;/i&gt;"]
+  U --&gt; CL["Clustering&lt;br/&gt;&lt;i&gt;cell types&lt;/i&gt;"]
+  U --&gt; DR["Dimensionality reduction&lt;br/&gt;&lt;i&gt;PCA on expression&lt;/i&gt;"]
+  U --&gt; G["Generative / density&lt;br/&gt;&lt;i&gt;denoising sequencing data&lt;/i&gt;"]
+  U --&gt; AN["Anomaly detection&lt;br/&gt;&lt;i&gt;contaminated samples&lt;/i&gt;"]
+  SS --&gt; PLM["Pretraining&lt;br/&gt;&lt;i&gt;protein language models&lt;/i&gt;"]
+  SEMI --&gt; SP["&lt;i&gt;labeling slides&lt;/i&gt;"]
+  RL --&gt; MD["&lt;i&gt;molecule design&lt;/i&gt;"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 
 
 
@@ -249,7 +255,7 @@ window.Quarto = {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/michaelaconnors\.github\.io\/ml-life-sciences\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

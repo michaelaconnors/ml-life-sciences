@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>The Complete Concept Map – ML in Life Sciences</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d31a0c91b01e363be7b7a36e602e2c70.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">ML in Life Sciences</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./concept-map.html" aria-current="page"> 
+<span class="menu-text">Concept Map</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#map-1-paradigms-tasks-methods" id="toc-map-1-paradigms-tasks-methods" class="nav-link active" data-scroll-target="#map-1-paradigms-tasks-methods">Map 1: Paradigms → Tasks → Methods</a></li>
+  <li><a href="#map-2-the-pipeline-choices-every-project-makes" id="toc-map-2-the-pipeline-choices-every-project-makes" class="nav-link" data-scroll-target="#map-2-the-pipeline-choices-every-project-makes">Map 2: The pipeline: choices every project makes</a></li>
+  <li><a href="#map-3-strategies-and-approaches-that-cut-across-everything" id="toc-map-3-strategies-and-approaches-that-cut-across-everything" class="nav-link" data-scroll-target="#map-3-strategies-and-approaches-that-cut-across-everything">Map 3: Strategies and approaches that cut across everything</a></li>
+  <li><a href="#map-4-the-math-underneath-and-where-each-tool-is-used" id="toc-map-4-the-math-underneath-and-where-each-tool-is-used" class="nav-link" data-scroll-target="#map-4-the-math-underneath-and-where-each-tool-is-used">Map 4: The math underneath, and where each tool is used</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Complete Concept Map</h1>
+<p class="subtitle lead">Every idea in machine learning for biology, labeled by what kind of thing it is</p>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Machine learning terms get confusing because they belong to <strong>different kinds of categories</strong> that are usually listed together. This page sorts them. The colors show what kind of thing each idea is:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Color</th>
+<th>Kind of thing</th>
+<th>The question it answers</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span style="background:#FDE2E0;border:2px solid #C0392B;padding:2px 8px;border-radius:4px">red</span></td>
+<td><strong>Paradigm</strong></td>
+<td>What does my training data look like?</td>
+<td>Supervised</td>
+</tr>
+<tr class="even">
+<td><span style="background:#FCEBD9;border:2px dashed #D35400;padding:2px 8px;border-radius:4px">orange, dashed</span></td>
+<td><strong>Hybrid paradigm</strong></td>
+<td>A mix of two paradigms</td>
+<td>Self-supervised</td>
+</tr>
+<tr class="odd">
+<td><span style="background:#E3EDFB;border:2px solid #1B4CA8;padding:2px 8px;border-radius:4px">blue</span></td>
+<td><strong>Task</strong></td>
+<td>What kind of answer do I want?</td>
+<td>Classification</td>
+</tr>
+<tr class="even">
+<td><span style="background:#E3F3EC;border:2px solid #0E6B58;padding:2px 8px;border-radius:4px">green</span></td>
+<td><strong>Method / model family</strong></td>
+<td>What machine produces the answer?</td>
+<td>Random forest</td>
+</tr>
+<tr class="odd">
+<td><span style="background:#FFF6D6;border:2px solid #B7950B;padding:2px 8px;border-radius:4px">yellow</span></td>
+<td><strong>Pipeline step</strong></td>
+<td>A choice every project makes</td>
+<td>Loss function</td>
+</tr>
+<tr class="even">
+<td><span style="background:#FFFFFF;border:2px solid #999;padding:2px 8px;border-radius:4px">white</span></td>
+<td><strong>Option</strong></td>
+<td>One possible answer to a pipeline choice</td>
+<td>Ridge (L2)</td>
+</tr>
+<tr class="odd">
+<td><span style="background:#F1E6F7;border:2px solid #7D3C98;padding:2px 8px;border-radius:4px">purple</span></td>
+<td><strong>Strategy / approach</strong></td>
+<td>A way of working that cuts across paradigms</td>
+<td>Transfer learning</td>
+</tr>
+<tr class="even">
+<td><span style="background:#EEEEEE;border:2px solid #555;padding:2px 8px;border-radius:4px">grey</span></td>
+<td><strong>Math tool</strong></td>
+<td>The math underneath</td>
+<td>Hessian</td>
+</tr>
+</tbody>
+</table>
+<section id="map-1-paradigms-tasks-methods" class="level2">
+<h2 class="anchored" data-anchor-id="map-1-paradigms-tasks-methods">Map 1: Paradigms → Tasks → Methods</h2>
+<p><em>Read left to right: what your data looks like → what you want to predict or find → the model families that can do it. Dashed lines mark hybrids.</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">flowchart LR
+  ML(["Machine learning"])
+
+  ML --&gt; SUP["&lt;b&gt;Supervised&lt;/b&gt;&lt;br/&gt;inputs + answers"]
+  ML --&gt; UNS["&lt;b&gt;Unsupervised&lt;/b&gt;&lt;br/&gt;inputs only"]
+  ML --&gt; RL["&lt;b&gt;Reinforcement&lt;/b&gt;&lt;br/&gt;actions + rewards"]
+  SUP -.-&gt; SEMI["&lt;b&gt;Semi-supervised&lt;/b&gt;&lt;br/&gt;few answers + many unlabeled"]
+  UNS -.-&gt; SEMI
+  SUP -.-&gt; SELF["&lt;b&gt;Self-supervised&lt;/b&gt;&lt;br/&gt;answers made from the input itself"]
+  UNS -.-&gt; SELF
+  SUP -.-&gt; WEAK["&lt;b&gt;Weakly supervised&lt;/b&gt;&lt;br/&gt;coarse or noisy answers"]
+
+  SUP --&gt; REG["Regression&lt;br/&gt;&lt;i&gt;y is a number&lt;/i&gt;&lt;br/&gt;disease progression"]
+  SUP --&gt; CLS["Classification&lt;br/&gt;&lt;i&gt;y is a category&lt;/i&gt;"]
+  CLS --&gt; BIN["Binary&lt;br/&gt;malignant vs benign"]
+  CLS --&gt; MCL["Multiclass&lt;br/&gt;one of 10 cell types"]
+  CLS --&gt; MLB["Multilabel&lt;br/&gt;protein with several functions"]
+  SUP --&gt; SURV["Time-to-event / survival&lt;br/&gt;time to relapse, some not yet observed"]
+  SUP --&gt; SEQL["Per-position labeling&lt;br/&gt;exon vs intron at each base"]
+  SUP --&gt; STRP["Structured prediction&lt;br/&gt;a whole 3D protein structure"]
+
+  REG --&gt; SMF["Supervised model families&lt;br/&gt;&lt;i&gt;most do regression AND classification&lt;/i&gt;"]
+  CLS --&gt; SMF
+  SMF --&gt; LIN["Linear models&lt;br/&gt;linear and logistic regression, GLMs"]
+  SMF --&gt; KNN["k-nearest neighbors"]
+  SMF --&gt; NBY["Naive Bayes"]
+  SMF --&gt; SVM["Support vector machines"]
+  SMF --&gt; GPR["Gaussian processes"]
+  SMF --&gt; TREE["Decision trees"]
+  TREE --&gt; ENS["Tree ensembles&lt;br/&gt;random forest, gradient boosting"]
+  SMF --&gt; NN["Neural networks"]
+  NN --&gt; MLP["MLP / fully connected&lt;br/&gt;tabular data"]
+  NN --&gt; CNN["CNN&lt;br/&gt;DNA motifs, microscopy images"]
+  NN --&gt; RNN["RNN / LSTM&lt;br/&gt;sequences, time series"]
+  NN --&gt; TRF["Transformer&lt;br/&gt;protein sequences, AlphaFold"]
+  NN --&gt; GNN["Graph neural network&lt;br/&gt;molecules, interaction networks"]
+  SURV --&gt; COX["Cox proportional hazards&lt;br/&gt;random survival forests"]
+  SEQL --&gt; HMM["Hidden Markov models&lt;br/&gt;gene finding, protein families"]
+  STRP --&gt; TRF
+
+  UNS --&gt; CLU["Clustering&lt;br/&gt;cell types, strains"]
+  UNS --&gt; DRD["Dimensionality reduction&lt;br/&gt;20,000 genes to a few axes"]
+  UNS --&gt; DEN["Density estimation and generative&lt;br/&gt;model the data, make new samples"]
+  UNS --&gt; ANO["Anomaly detection&lt;br/&gt;contaminated samples, rare cells"]
+  CLU --&gt; KMN["k-means"]
+  CLU --&gt; HCL["Hierarchical clustering"]
+  CLU --&gt; GMM["Gaussian mixture models"]
+  CLU --&gt; DBS["DBSCAN"]
+  CLU --&gt; LEI["Leiden / Louvain graph clustering&lt;br/&gt;standard in single-cell"]
+  DRD --&gt; PCA["PCA&lt;br/&gt;linear"]
+  DRD --&gt; NMF["NMF, ICA, factor analysis"]
+  DRD --&gt; UMP["t-SNE / UMAP&lt;br/&gt;nonlinear, for visualization"]
+  DRD --&gt; AEN["Autoencoders"]
+  DEN --&gt; GMM
+  DEN --&gt; KDE["Kernel density estimation"]
+  DEN --&gt; VAE["VAEs&lt;br/&gt;scVI for single-cell"]
+  DEN --&gt; DIF["Diffusion models&lt;br/&gt;protein design"]
+  DEN --&gt; GAN["GANs"]
+  DEN --&gt; HMM
+  ANO --&gt; ISO["Isolation forest"]
+  ANO --&gt; AEN
+
+  SELF --&gt; MSK["Masked prediction&lt;br/&gt;hide amino acids: ESM protein LMs"]
+  SELF --&gt; NXT["Next-token prediction&lt;br/&gt;generate protein sequences"]
+  SELF --&gt; CON["Contrastive learning&lt;br/&gt;two views of one cell should match"]
+  SEMI --&gt; PSL["Pseudo-labeling / self-training"]
+  SEMI --&gt; LPR["Label propagation"]
+  WEAK --&gt; MIL["Multiple-instance learning&lt;br/&gt;slide-level diagnosis, unlabeled patches"]
+  RL --&gt; QLR["Value-based: Q-learning"]
+  RL --&gt; PGR["Policy gradient"]
+  RL --&gt; BND["Bandits&lt;br/&gt;which experiment to run next"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class ML root
+  class SUP,UNS,RL paradigm
+  class SEMI,SELF,WEAK hybrid
+  class REG,CLS,BIN,MCL,MLB,SURV,SEQL,STRP,CLU,DRD,DEN,ANO,MSK,NXT,CON task
+  class SMF,LIN,KNN,NBY,SVM,GPR,TREE,ENS,NN,MLP,CNN,RNN,TRF,GNN,COX,HMM,KMN,HCL,GMM,DBS,LEI,PCA,NMF,UMP,AEN,KDE,VAE,DIF,GAN,ISO,PSL,LPR,MIL,QLR,PGR,BND method
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Why some methods appear in several places:</strong> a method is a tool, not a category. <strong>PCA</strong> is a standalone unsupervised method, but it is <em>also</em> used as a preprocessing step inside supervised pipelines (see Map 2). <strong>HMMs</strong> label sequences and also model densities. <strong>Autoencoders</strong> reduce dimensions and also detect anomalies.</p>
+</div>
+</div>
+</section>
+<section id="map-2-the-pipeline-choices-every-project-makes" class="level2">
+<h2 class="anchored" data-anchor-id="map-2-the-pipeline-choices-every-project-makes">Map 2: The pipeline: choices every project makes</h2>
+<p><em>Whatever paradigm and model you choose, you walk through these steps. Yellow = the step; white = the options at that step.</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">flowchart TB
+  subgraph S0["0 · Question and data"]
+    direction TB
+    Q1["What is one sample? What is y?"]
+    Q2["How many samples n vs features p?"]
+  end
+  subgraph S1["1 · Split the data FIRST"]
+    direction TB
+    SP1["Train / validation / test"]
+    SP2["k-fold cross-validation"]
+    SP3["Leakage: never let test data touch training"]
+  end
+  subgraph S2["2 · Preprocessing"]
+    direction TB
+    P1["Center / standardize features"]
+    P2["Log-transform counts"]
+    P3["Normalize library size, RNA-seq"]
+    P4["Batch-effect correction"]
+    P5["Impute missing values"]
+    P6["One-hot encode categories"]
+    P7["Feature selection"]
+    P8["PCA as preprocessing"]
+  end
+  subgraph S3["3 · Model family"]
+    direction TB
+    M1["See Map 1"]
+    M2["Hyperparameters: set by you, not learned"]
+  end
+  subgraph S4["4 · Loss function"]
+    direction TB
+    L1["MSE: Gaussian noise"]
+    L2["MAE / Huber: outliers"]
+    L3["Binary cross-entropy"]
+    L4["Categorical cross-entropy"]
+    L5["Hinge: SVMs"]
+    L6["Poisson / negative binomial: count data"]
+    L7["Cox partial likelihood: survival"]
+    L8["Reconstruction + KL: VAEs"]
+    L9["Contrastive loss"]
+  end
+  subgraph S5["5 · Regularization: fight overfitting"]
+    direction TB
+    R1["Ridge, L2"]
+    R2["Lasso, L1: sparse"]
+    R3["Elastic net, L1 + L2"]
+    R4["Dropout"]
+    R5["Early stopping"]
+    R6["Data augmentation"]
+    R7["Tree depth limits / pruning"]
+  end
+  subgraph S6["6 · Optimizer: how to minimize the loss"]
+    direction TB
+    O1["Closed form: normal equation"]
+    O2["Full-batch gradient descent"]
+    O3["Stochastic gradient descent, 1 sample"]
+    O4["Mini-batch gradient descent"]
+    O5["Momentum / Adam"]
+    O6["Newton's method: uses the Hessian"]
+    O7["Coordinate descent: lasso"]
+    O8["EM algorithm: GMMs, HMMs"]
+    O9["Greedy splitting: trees"]
+  end
+  subgraph S7["7 · Evaluation"]
+    direction TB
+    E1["Regression: MSE, R²"]
+    E2["Classification: accuracy, precision, recall, ROC-AUC, confusion matrix"]
+    E3["Clustering: silhouette, agreement with known labels"]
+    E4["Calibration: are probabilities honest?"]
+    E5["Diagnose: overfitting vs underfitting, bias-variance trade-off"]
+    E6["Tune hyperparameters on validation data"]
+  end
+  subgraph S8["8 · Interpretation and inference"]
+    direction TB
+    I1["Feature importance / SHAP"]
+    I2["Predict new samples, same preprocessing"]
+    I3["Extrapolation warnings"]
+  end
+  S0 --&gt; S1 --&gt; S2 --&gt; S3 --&gt; S4 --&gt; S5 --&gt; S6 --&gt; S7 --&gt; S8
+  S7 -. "not good enough? go back" .-&gt; S2
+
+  classDef option fill:#FFFFFF,stroke:#999999,color:#2C2C2A
+  class Q1,Q2,SP1,SP2,SP3,P1,P2,P3,P4,P5,P6,P7,P8,M1,M2,L1,L2,L3,L4,L5,L6,L7,L8,L9,R1,R2,R3,R4,R5,R6,R7,O1,O2,O3,O4,O5,O6,O7,O8,O9,E1,E2,E3,E4,E5,E6,I1,I2,I3 option
+  style S0 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S1 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S2 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S3 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S4 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S5 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S6 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S7 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S8 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="map-3-strategies-and-approaches-that-cut-across-everything" class="level2">
+<h2 class="anchored" data-anchor-id="map-3-strategies-and-approaches-that-cut-across-everything">Map 3: Strategies and approaches that cut across everything</h2>
+<p><em>These are not paradigms or models. They are ways of working that can be combined with almost any of them.</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">flowchart TB
+  subgraph A1["Statistical approach: how you treat the unknown parameters"]
+    direction TB
+    F1["Frequentist / MLE&lt;br/&gt;find the single best w"]
+    B1["Bayesian&lt;br/&gt;prior × likelihood → posterior over w"]
+    MAP["MAP estimate&lt;br/&gt;the peak of the posterior"]
+    B1 --&gt; MAP
+    MAP --&gt; RID["Ridge = MAP with a Gaussian prior&lt;br/&gt;Lasso = MAP with a Laplace prior"]
+  end
+  subgraph A2["Learning strategies"]
+    direction TB
+    T1["Transfer learning and fine-tuning&lt;br/&gt;pretrain big, adapt to your small dataset"]
+    T2["Active learning&lt;br/&gt;model picks the next experiment"]
+    T3["Online learning&lt;br/&gt;update as new data streams in"]
+    T4["Multi-task learning&lt;br/&gt;one model, several related outputs"]
+    T5["Ensembling&lt;br/&gt;bagging, boosting, stacking"]
+    T6["Federated learning&lt;br/&gt;train across hospitals without sharing data"]
+  end
+  subgraph A3["Model properties"]
+    direction TB
+    D1["Discriminative: models p(y given x)&lt;br/&gt;logistic regression, most neural nets"]
+    D2["Generative: models p(x, y) or p(x)&lt;br/&gt;naive Bayes, HMMs, VAEs, diffusion"]
+    D3["Parametric: fixed number of parameters&lt;br/&gt;linear models, neural nets"]
+    D4["Non-parametric: grows with the data&lt;br/&gt;k-NN, Gaussian processes, trees"]
+  end
+
+  classDef strategy fill:#F1E6F7,stroke:#7D3C98,stroke-width:2px,color:#2C2C2A
+  class F1,B1,MAP,RID,T1,T2,T3,T4,T5,T6,D1,D2,D3,D4 strategy
+  style A1 fill:#FAFAF8,stroke:#BBBBBB
+  style A2 fill:#FAFAF8,stroke:#BBBBBB
+  style A3 fill:#FAFAF8,stroke:#BBBBBB
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="map-4-the-math-underneath-and-where-each-tool-is-used" class="level2">
+<h2 class="anchored" data-anchor-id="map-4-the-math-underneath-and-where-each-tool-is-used">Map 4: The math underneath, and where each tool is used</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">flowchart LR
+  subgraph LA["Linear algebra"]
+    direction TB
+    LA1["Vectors, matrices, dot products"]
+    LA2["Eigendecomposition / SVD"]
+  end
+  subgraph CA["Calculus"]
+    direction TB
+    CA1["Gradient"]
+    CA2["Chain rule"]
+    CA3["Jacobian"]
+    CA4["Hessian"]
+    CA5["Gradient flow ODE"]
+  end
+  subgraph PS["Probability and statistics"]
+    direction TB
+    PS1["Likelihood / MLE"]
+    PS2["Bayes' rule"]
+    PS3["Entropy"]
+    PS4["KL divergence"]
+  end
+
+  LA1 --&gt; U1["Linear models and every neural-net layer: Xw + b"]
+  LA2 --&gt; U2["PCA"]
+  CA1 --&gt; U3["Gradient descent"]
+  CA2 --&gt; U4["Backpropagation in neural nets"]
+  CA3 --&gt; U4
+  CA4 --&gt; U5["Newton's method, curvature, max learning rate"]
+  CA5 --&gt; U6["Gradient descent = Euler steps"]
+  PS1 --&gt; U7["Where loss functions come from: MSE, cross-entropy"]
+  PS2 --&gt; U8["Bayesian models, naive Bayes, HMMs"]
+  PS3 --&gt; U9["Cross-entropy loss, decision-tree splits"]
+  PS4 --&gt; U10["VAEs, comparing distributions"]
+
+  classDef math fill:#EEEEEE,stroke:#555555,stroke-width:2px,color:#2C2C2A
+  classDef use fill:#FFFFFF,stroke:#999999,color:#2C2C2A
+  class LA1,LA2,CA1,CA2,CA3,CA4,CA5,PS1,PS2,PS3,PS4 math
+  class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10 use
+  style LA fill:#FAFAF8,stroke:#BBBBBB
+  style CA fill:#FAFAF8,stroke:#BBBBBB
+  style PS fill:#FAFAF8,stroke:#BBBBBB
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/michaelaconnors\.github\.io\/ml-life-sciences\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
