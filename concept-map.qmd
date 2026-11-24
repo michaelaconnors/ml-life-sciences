@@ -1,0 +1,293 @@
+---
+title: "The Complete Concept Map"
+subtitle: "Every idea in machine learning for biology, labeled by what kind of thing it is"
+page-layout: full
+---
+
+Machine learning terms get confusing because they belong to **different kinds of categories** that are usually listed together. This page sorts them. The colors show what kind of thing each idea is:
+
+| Color | Kind of thing | The question it answers | Example |
+|---|---|---|---|
+| <span style="background:#FDE2E0;border:2px solid #C0392B;padding:2px 8px;border-radius:4px">red</span> | **Paradigm** | What does my training data look like? | Supervised |
+| <span style="background:#FCEBD9;border:2px dashed #D35400;padding:2px 8px;border-radius:4px">orange, dashed</span> | **Hybrid paradigm** | A mix of two paradigms | Self-supervised |
+| <span style="background:#E3EDFB;border:2px solid #1B4CA8;padding:2px 8px;border-radius:4px">blue</span> | **Task** | What kind of answer do I want? | Classification |
+| <span style="background:#E3F3EC;border:2px solid #0E6B58;padding:2px 8px;border-radius:4px">green</span> | **Method / model family** | What machine produces the answer? | Random forest |
+| <span style="background:#FFF6D6;border:2px solid #B7950B;padding:2px 8px;border-radius:4px">yellow</span> | **Pipeline step** | A choice every project makes | Loss function |
+| <span style="background:#FFFFFF;border:2px solid #999;padding:2px 8px;border-radius:4px">white</span> | **Option** | One possible answer to a pipeline choice | Ridge (L2) |
+| <span style="background:#F1E6F7;border:2px solid #7D3C98;padding:2px 8px;border-radius:4px">purple</span> | **Strategy / approach** | A way of working that cuts across paradigms | Transfer learning |
+| <span style="background:#EEEEEE;border:2px solid #555;padding:2px 8px;border-radius:4px">grey</span> | **Math tool** | The math underneath | Hessian |
+
+## Map 1: Paradigms → Tasks → Methods
+
+*Read left to right: what your data looks like → what you want to predict or find → the model families that can do it. Dashed lines mark hybrids.*
+
+```{mermaid}
+flowchart LR
+  ML(["Machine learning"])
+
+  ML --> SUP["<b>Supervised</b><br/>inputs + answers"]
+  ML --> UNS["<b>Unsupervised</b><br/>inputs only"]
+  ML --> RL["<b>Reinforcement</b><br/>actions + rewards"]
+  SUP -.-> SEMI["<b>Semi-supervised</b><br/>few answers + many unlabeled"]
+  UNS -.-> SEMI
+  SUP -.-> SELF["<b>Self-supervised</b><br/>answers made from the input itself"]
+  UNS -.-> SELF
+  SUP -.-> WEAK["<b>Weakly supervised</b><br/>coarse or noisy answers"]
+
+  SUP --> REG["Regression<br/><i>y is a number</i><br/>disease progression"]
+  SUP --> CLS["Classification<br/><i>y is a category</i>"]
+  CLS --> BIN["Binary<br/>malignant vs benign"]
+  CLS --> MCL["Multiclass<br/>one of 10 cell types"]
+  CLS --> MLB["Multilabel<br/>protein with several functions"]
+  SUP --> SURV["Time-to-event / survival<br/>time to relapse, some not yet observed"]
+  SUP --> SEQL["Per-position labeling<br/>exon vs intron at each base"]
+  SUP --> STRP["Structured prediction<br/>a whole 3D protein structure"]
+
+  REG --> SMF["Supervised model families<br/><i>most do regression AND classification</i>"]
+  CLS --> SMF
+  SMF --> LIN["Linear models<br/>linear and logistic regression, GLMs"]
+  SMF --> KNN["k-nearest neighbors"]
+  SMF --> NBY["Naive Bayes"]
+  SMF --> SVM["Support vector machines"]
+  SMF --> GPR["Gaussian processes"]
+  SMF --> TREE["Decision trees"]
+  TREE --> ENS["Tree ensembles<br/>random forest, gradient boosting"]
+  SMF --> NN["Neural networks"]
+  NN --> MLP["MLP / fully connected<br/>tabular data"]
+  NN --> CNN["CNN<br/>DNA motifs, microscopy images"]
+  NN --> RNN["RNN / LSTM<br/>sequences, time series"]
+  NN --> TRF["Transformer<br/>protein sequences, AlphaFold"]
+  NN --> GNN["Graph neural network<br/>molecules, interaction networks"]
+  SURV --> COX["Cox proportional hazards<br/>random survival forests"]
+  SEQL --> HMM["Hidden Markov models<br/>gene finding, protein families"]
+  STRP --> TRF
+
+  UNS --> CLU["Clustering<br/>cell types, strains"]
+  UNS --> DRD["Dimensionality reduction<br/>20,000 genes to a few axes"]
+  UNS --> DEN["Density estimation and generative<br/>model the data, make new samples"]
+  UNS --> ANO["Anomaly detection<br/>contaminated samples, rare cells"]
+  CLU --> KMN["k-means"]
+  CLU --> HCL["Hierarchical clustering"]
+  CLU --> GMM["Gaussian mixture models"]
+  CLU --> DBS["DBSCAN"]
+  CLU --> LEI["Leiden / Louvain graph clustering<br/>standard in single-cell"]
+  DRD --> PCA["PCA<br/>linear"]
+  DRD --> NMF["NMF, ICA, factor analysis"]
+  DRD --> UMP["t-SNE / UMAP<br/>nonlinear, for visualization"]
+  DRD --> AEN["Autoencoders"]
+  DEN --> GMM
+  DEN --> KDE["Kernel density estimation"]
+  DEN --> VAE["VAEs<br/>scVI for single-cell"]
+  DEN --> DIF["Diffusion models<br/>protein design"]
+  DEN --> GAN["GANs"]
+  DEN --> HMM
+  ANO --> ISO["Isolation forest"]
+  ANO --> AEN
+
+  SELF --> MSK["Masked prediction<br/>hide amino acids: ESM protein LMs"]
+  SELF --> NXT["Next-token prediction<br/>generate protein sequences"]
+  SELF --> CON["Contrastive learning<br/>two views of one cell should match"]
+  SEMI --> PSL["Pseudo-labeling / self-training"]
+  SEMI --> LPR["Label propagation"]
+  WEAK --> MIL["Multiple-instance learning<br/>slide-level diagnosis, unlabeled patches"]
+  RL --> QLR["Value-based: Q-learning"]
+  RL --> PGR["Policy gradient"]
+  RL --> BND["Bandits<br/>which experiment to run next"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class ML root
+  class SUP,UNS,RL paradigm
+  class SEMI,SELF,WEAK hybrid
+  class REG,CLS,BIN,MCL,MLB,SURV,SEQL,STRP,CLU,DRD,DEN,ANO,MSK,NXT,CON task
+  class SMF,LIN,KNN,NBY,SVM,GPR,TREE,ENS,NN,MLP,CNN,RNN,TRF,GNN,COX,HMM,KMN,HCL,GMM,DBS,LEI,PCA,NMF,UMP,AEN,KDE,VAE,DIF,GAN,ISO,PSL,LPR,MIL,QLR,PGR,BND method
+```
+
+::: {.callout-note}
+**Why some methods appear in several places:** a method is a tool, not a category. **PCA** is a standalone unsupervised method, but it is *also* used as a preprocessing step inside supervised pipelines (see Map 2). **HMMs** label sequences and also model densities. **Autoencoders** reduce dimensions and also detect anomalies.
+:::
+
+## Map 2: The pipeline: choices every project makes
+
+*Whatever paradigm and model you choose, you walk through these steps. Yellow = the step; white = the options at that step.*
+
+```{mermaid}
+flowchart TB
+  subgraph S0["0 · Question and data"]
+    direction TB
+    Q1["What is one sample? What is y?"]
+    Q2["How many samples n vs features p?"]
+  end
+  subgraph S1["1 · Split the data FIRST"]
+    direction TB
+    SP1["Train / validation / test"]
+    SP2["k-fold cross-validation"]
+    SP3["Leakage: never let test data touch training"]
+  end
+  subgraph S2["2 · Preprocessing"]
+    direction TB
+    P1["Center / standardize features"]
+    P2["Log-transform counts"]
+    P3["Normalize library size, RNA-seq"]
+    P4["Batch-effect correction"]
+    P5["Impute missing values"]
+    P6["One-hot encode categories"]
+    P7["Feature selection"]
+    P8["PCA as preprocessing"]
+  end
+  subgraph S3["3 · Model family"]
+    direction TB
+    M1["See Map 1"]
+    M2["Hyperparameters: set by you, not learned"]
+  end
+  subgraph S4["4 · Loss function"]
+    direction TB
+    L1["MSE: Gaussian noise"]
+    L2["MAE / Huber: outliers"]
+    L3["Binary cross-entropy"]
+    L4["Categorical cross-entropy"]
+    L5["Hinge: SVMs"]
+    L6["Poisson / negative binomial: count data"]
+    L7["Cox partial likelihood: survival"]
+    L8["Reconstruction + KL: VAEs"]
+    L9["Contrastive loss"]
+  end
+  subgraph S5["5 · Regularization: fight overfitting"]
+    direction TB
+    R1["Ridge, L2"]
+    R2["Lasso, L1: sparse"]
+    R3["Elastic net, L1 + L2"]
+    R4["Dropout"]
+    R5["Early stopping"]
+    R6["Data augmentation"]
+    R7["Tree depth limits / pruning"]
+  end
+  subgraph S6["6 · Optimizer: how to minimize the loss"]
+    direction TB
+    O1["Closed form: normal equation"]
+    O2["Full-batch gradient descent"]
+    O3["Stochastic gradient descent, 1 sample"]
+    O4["Mini-batch gradient descent"]
+    O5["Momentum / Adam"]
+    O6["Newton's method: uses the Hessian"]
+    O7["Coordinate descent: lasso"]
+    O8["EM algorithm: GMMs, HMMs"]
+    O9["Greedy splitting: trees"]
+  end
+  subgraph S7["7 · Evaluation"]
+    direction TB
+    E1["Regression: MSE, R²"]
+    E2["Classification: accuracy, precision, recall, ROC-AUC, confusion matrix"]
+    E3["Clustering: silhouette, agreement with known labels"]
+    E4["Calibration: are probabilities honest?"]
+    E5["Diagnose: overfitting vs underfitting, bias-variance trade-off"]
+    E6["Tune hyperparameters on validation data"]
+  end
+  subgraph S8["8 · Interpretation and inference"]
+    direction TB
+    I1["Feature importance / SHAP"]
+    I2["Predict new samples, same preprocessing"]
+    I3["Extrapolation warnings"]
+  end
+  S0 --> S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8
+  S7 -. "not good enough? go back" .-> S2
+
+  classDef option fill:#FFFFFF,stroke:#999999,color:#2C2C2A
+  class Q1,Q2,SP1,SP2,SP3,P1,P2,P3,P4,P5,P6,P7,P8,M1,M2,L1,L2,L3,L4,L5,L6,L7,L8,L9,R1,R2,R3,R4,R5,R6,R7,O1,O2,O3,O4,O5,O6,O7,O8,O9,E1,E2,E3,E4,E5,E6,I1,I2,I3 option
+  style S0 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S1 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S2 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S3 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S4 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S5 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S6 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S7 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S8 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+```
+
+## Map 3: Strategies and approaches that cut across everything
+
+*These are not paradigms or models. They are ways of working that can be combined with almost any of them.*
+
+```{mermaid}
+flowchart TB
+  subgraph A1["Statistical approach: how you treat the unknown parameters"]
+    direction TB
+    F1["Frequentist / MLE<br/>find the single best w"]
+    B1["Bayesian<br/>prior × likelihood → posterior over w"]
+    MAP["MAP estimate<br/>the peak of the posterior"]
+    B1 --> MAP
+    MAP --> RID["Ridge = MAP with a Gaussian prior<br/>Lasso = MAP with a Laplace prior"]
+  end
+  subgraph A2["Learning strategies"]
+    direction TB
+    T1["Transfer learning and fine-tuning<br/>pretrain big, adapt to your small dataset"]
+    T2["Active learning<br/>model picks the next experiment"]
+    T3["Online learning<br/>update as new data streams in"]
+    T4["Multi-task learning<br/>one model, several related outputs"]
+    T5["Ensembling<br/>bagging, boosting, stacking"]
+    T6["Federated learning<br/>train across hospitals without sharing data"]
+  end
+  subgraph A3["Model properties"]
+    direction TB
+    D1["Discriminative: models p(y given x)<br/>logistic regression, most neural nets"]
+    D2["Generative: models p(x, y) or p(x)<br/>naive Bayes, HMMs, VAEs, diffusion"]
+    D3["Parametric: fixed number of parameters<br/>linear models, neural nets"]
+    D4["Non-parametric: grows with the data<br/>k-NN, Gaussian processes, trees"]
+  end
+
+  classDef strategy fill:#F1E6F7,stroke:#7D3C98,stroke-width:2px,color:#2C2C2A
+  class F1,B1,MAP,RID,T1,T2,T3,T4,T5,T6,D1,D2,D3,D4 strategy
+  style A1 fill:#FAFAF8,stroke:#BBBBBB
+  style A2 fill:#FAFAF8,stroke:#BBBBBB
+  style A3 fill:#FAFAF8,stroke:#BBBBBB
+```
+
+## Map 4: The math underneath, and where each tool is used
+
+```{mermaid}
+flowchart LR
+  subgraph LA["Linear algebra"]
+    direction TB
+    LA1["Vectors, matrices, dot products"]
+    LA2["Eigendecomposition / SVD"]
+  end
+  subgraph CA["Calculus"]
+    direction TB
+    CA1["Gradient"]
+    CA2["Chain rule"]
+    CA3["Jacobian"]
+    CA4["Hessian"]
+    CA5["Gradient flow ODE"]
+  end
+  subgraph PS["Probability and statistics"]
+    direction TB
+    PS1["Likelihood / MLE"]
+    PS2["Bayes' rule"]
+    PS3["Entropy"]
+    PS4["KL divergence"]
+  end
+
+  LA1 --> U1["Linear models and every neural-net layer: Xw + b"]
+  LA2 --> U2["PCA"]
+  CA1 --> U3["Gradient descent"]
+  CA2 --> U4["Backpropagation in neural nets"]
+  CA3 --> U4
+  CA4 --> U5["Newton's method, curvature, max learning rate"]
+  CA5 --> U6["Gradient descent = Euler steps"]
+  PS1 --> U7["Where loss functions come from: MSE, cross-entropy"]
+  PS2 --> U8["Bayesian models, naive Bayes, HMMs"]
+  PS3 --> U9["Cross-entropy loss, decision-tree splits"]
+  PS4 --> U10["VAEs, comparing distributions"]
+
+  classDef math fill:#EEEEEE,stroke:#555555,stroke-width:2px,color:#2C2C2A
+  classDef use fill:#FFFFFF,stroke:#999999,color:#2C2C2A
+  class LA1,LA2,CA1,CA2,CA3,CA4,CA5,PS1,PS2,PS3,PS4 math
+  class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10 use
+  style LA fill:#FAFAF8,stroke:#BBBBBB
+  style CA fill:#FAFAF8,stroke:#BBBBBB
+  style PS fill:#FAFAF8,stroke:#BBBBBB
+```

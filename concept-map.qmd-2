@@ -1,0 +1,328 @@
+---
+title: "The Complete Concept Map"
+subtitle: "Every idea in machine learning for biology, labeled by what kind of thing it is"
+page-layout: full
+---
+
+Machine learning terms get confusing because they belong to **different kinds of categories** that are usually listed together. This page sorts them. The colors show what kind of thing each idea is:
+
+| Color | Kind of thing | The question it answers | Example |
+|---|---|---|---|
+| <span style="background:#FDE2E0;border:2px solid #C0392B;padding:2px 8px;border-radius:4px">red</span> | **Paradigm** | What does my training data look like? | Supervised |
+| <span style="background:#FCEBD9;border:2px dashed #D35400;padding:2px 8px;border-radius:4px">orange, dashed</span> | **Hybrid paradigm** | A mix of two paradigms | Self-supervised |
+| <span style="background:#E3EDFB;border:2px solid #1B4CA8;padding:2px 8px;border-radius:4px">blue</span> | **Task** | What kind of answer do I want? | Classification |
+| <span style="background:#E3F3EC;border:2px solid #0E6B58;padding:2px 8px;border-radius:4px">green</span> | **Method / model family** | What machine produces the answer? | Random forest |
+| <span style="background:#FFF6D6;border:2px solid #B7950B;padding:2px 8px;border-radius:4px">yellow</span> | **Pipeline step** | A choice every project makes | Loss function |
+| <span style="background:#FFFFFF;border:2px solid #999;padding:2px 8px;border-radius:4px">white</span> | **Option** | One possible answer to a pipeline choice | Ridge (L2) |
+| <span style="background:#F1E6F7;border:2px solid #7D3C98;padding:2px 8px;border-radius:4px">purple</span> | **Strategy / approach** | A way of working that cuts across paradigms | Transfer learning |
+| <span style="background:#EEEEEE;border:2px solid #555;padding:2px 8px;border-radius:4px">grey</span> | **Math tool** | The math underneath | Hessian |
+
+## Map 1: The paradigms
+
+*The top of the tree: what your training data looks like. Dashed lines mark hybrids that borrow from two paradigms.*
+
+```{mermaid}
+%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  ML(["Machine learning"])
+  ML --> SUP["<b>Supervised</b><br/>inputs + answers"]
+  ML --> UNS["<b>Unsupervised</b><br/>inputs only"]
+  ML --> RL["<b>Reinforcement</b><br/>actions + rewards"]
+  SUP -.-> WEAK["<b>Weakly supervised</b><br/>coarse or noisy answers"]
+  SUP -.-> SEMI["<b>Semi-supervised</b><br/>few answers + many unlabeled"]
+  UNS -.-> SEMI
+  SUP -.-> SELF["<b>Self-supervised</b><br/>answers made from the input itself"]
+  UNS -.-> SELF
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class ML root
+  class SUP,UNS,RL paradigm
+  class SEMI,SELF,WEAK hybrid
+```
+
+## Map 2: Supervised learning: tasks → methods
+
+*Blue = the kind of answer you want. Green = model families that can produce it. Many families appear under several tasks: they are tools, not categories.*
+
+```{mermaid}
+%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  SUP["<b>Supervised</b>"]
+  SUP --> REG["<b>Regression</b><br/>y is a number<br/><i>disease progression</i>"]
+  SUP --> CLS["<b>Classification</b><br/>y is a category<br/>binary · multiclass · multilabel<br/><i>tumor malignancy, cell type</i>"]
+  SUP --> SURV["<b>Time-to-event</b><br/>time until something happens<br/><i>time to relapse</i>"]
+  SUP --> SEQL["<b>Per-position labeling</b><br/>a label at every position<br/><i>exon vs intron at each base</i>"]
+  SUP --> STRP["<b>Structured prediction</b><br/>a whole object as output<br/><i>3D protein structure</i>"]
+  REG --> MREG["linear regression<br/>k-nearest neighbors<br/>support vector regression<br/>Gaussian processes<br/>trees · random forest · boosting<br/>neural networks"]
+  CLS --> MCLS["logistic regression<br/>naive Bayes<br/>k-nearest neighbors<br/>support vector machines<br/>trees · random forest · boosting<br/>neural networks"]
+  SURV --> MSURV["Cox proportional hazards<br/>random survival forests<br/>neural survival models"]
+  SEQL --> MSEQ["hidden Markov models<br/>RNNs / LSTMs<br/>transformers"]
+  STRP --> MSTR["transformers + geometry modules<br/><i>AlphaFold</i>"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class SUP paradigm
+  class REG,CLS,SURV,SEQL,STRP task
+  class MREG,MCLS,MSURV,MSEQ,MSTR method
+```
+
+## Map 3: Unsupervised learning: tasks → methods
+
+```{mermaid}
+%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  UNS["<b>Unsupervised</b>"]
+  UNS --> CLU["<b>Clustering</b><br/>find groups<br/><i>cell types, strains</i>"]
+  UNS --> DRD["<b>Dimensionality reduction</b><br/>few axes that keep the variation<br/><i>20,000 genes → 2–50 axes</i>"]
+  UNS --> DEN["<b>Density estimation & generative</b><br/>model the data, make new samples<br/><i>denoise sequencing data</i>"]
+  UNS --> ANO["<b>Anomaly detection</b><br/>find the odd samples<br/><i>contaminated runs, rare cells</i>"]
+  CLU --> MCLU["k-means<br/>hierarchical clustering<br/>Gaussian mixture models<br/>DBSCAN<br/>Leiden / Louvain <i>(single-cell)</i>"]
+  DRD --> MDRD["PCA <i>(linear)</i><br/>NMF · ICA · factor analysis<br/>t-SNE · UMAP <i>(nonlinear, visualization)</i><br/>autoencoders"]
+  DEN --> MDEN["kernel density estimation<br/>Gaussian mixture models<br/>hidden Markov models<br/>VAEs <i>(scVI)</i><br/>diffusion models · GANs"]
+  ANO --> MANO["isolation forest<br/>autoencoder reconstruction error<br/>distance from cluster centers"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class UNS paradigm
+  class CLU,DRD,DEN,ANO task
+  class MCLU,MDRD,MDEN,MANO method
+```
+
+::: {.callout-note}
+**PCA is in two places on this site.** Here it is a standalone method (explore your data). In the pipeline map below, it is also a *preprocessing step* inside a bigger model, e.g. normalize → PCA → cluster in single-cell analysis.
+:::
+
+## Map 4: Hybrids and reinforcement learning
+
+```{mermaid}
+%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  SELF["<b>Self-supervised</b>"] --> TSELF["<b>Pretext tasks</b><br/>masked prediction <i>(ESM protein LMs)</i><br/>next-token prediction <i>(protein generation)</i><br/>contrastive learning <i>(two views should match)</i>"]
+  SEMI["<b>Semi-supervised</b>"] --> MSEMI["pseudo-labeling / self-training<br/>label propagation"]
+  WEAK["<b>Weakly supervised</b>"] --> MWEAK["multiple-instance learning<br/><i>slide-level diagnosis,<br/>unlabeled image patches</i>"]
+  RL["<b>Reinforcement</b>"] --> MRL["value-based: Q-learning<br/>policy gradient<br/>bandits <i>(which experiment next)</i>"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class RL paradigm
+  class SELF,SEMI,WEAK hybrid
+  class TSELF task
+  class MSEMI,MWEAK,MRL method
+```
+
+## Map 5: Neural network architectures: match the shape of your data
+
+*"Neural network" appears in almost every map above. The architecture is chosen to fit the structure of one input sample.*
+
+```{mermaid}
+%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  NN["<b>Neural networks</b>"]
+  NN --> MLP["<b>MLP</b><br/>fully connected<br/>one sample = a row of numbers<br/><i>clinical measurements</i>"]
+  NN --> CNN["<b>CNN</b><br/>local patterns<br/>one sample = an image or sequence<br/><i>DNA motifs, microscopy</i>"]
+  NN --> RNN["<b>RNN / LSTM</b><br/>step-by-step memory<br/>one sample = a sequence in time<br/><i>expression time course</i>"]
+  NN --> TRF["<b>Transformer</b><br/>attention, long-range links<br/>one sample = a long sequence<br/><i>proteins, AlphaFold</i>"]
+  NN --> GNN["<b>Graph neural network</b><br/>message passing<br/>one sample = a graph<br/><i>molecules, interaction networks</i>"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class NN method
+  class MLP,CNN,RNN,TRF,GNN method
+```
+
+## Map 6: The pipeline: choices every project makes
+
+*Read left to right. Yellow = the step; white = the options at that step.*
+
+```{mermaid}
+flowchart LR
+  subgraph S0["0 · Question & data"]
+    direction TB
+    Q1["What is one sample?<br/>What is y?"]
+    Q2["n samples vs<br/>p features"]
+  end
+  subgraph S1["1 · Split FIRST"]
+    direction TB
+    SP1["train / validation / test"]
+    SP2["k-fold cross-validation"]
+    SP3["avoid leakage"]
+  end
+  subgraph S2["2 · Preprocess"]
+    direction TB
+    P1["center / standardize"]
+    P2["log-transform counts"]
+    P3["normalize library size"]
+    P4["batch-effect correction"]
+    P5["impute missing values"]
+    P6["one-hot encode"]
+    P7["feature selection"]
+    P8["PCA"]
+  end
+  subgraph S3["3 · Model"]
+    direction TB
+    M1["see Maps 2–5"]
+    M2["hyperparameters:<br/>set by you"]
+  end
+  subgraph S4["4 · Loss"]
+    direction TB
+    L1["MSE"]
+    L2["MAE / Huber"]
+    L3["binary cross-entropy"]
+    L4["categorical cross-entropy"]
+    L5["hinge"]
+    L6["Poisson / neg. binomial"]
+    L7["Cox partial likelihood"]
+    L8["reconstruction + KL"]
+    L9["contrastive"]
+  end
+  S0 --> S1 --> S2 --> S3 --> S4
+
+  classDef option fill:#FFFFFF,stroke:#999999,color:#2C2C2A
+  style S0 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S1 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S2 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S3 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S4 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  class Q1,Q2,SP1,SP2,SP3,P1,P2,P3,P4,P5,P6,P7,P8,M1,M2,L1,L2,L3,L4,L5,L6,L7,L8,L9 option
+```
+
+*…continued:*
+
+```{mermaid}
+flowchart LR
+  subgraph S5["5 · Regularize"]
+    direction TB
+    R1["ridge, L2"]
+    R2["lasso, L1"]
+    R3["elastic net"]
+    R4["dropout"]
+    R5["early stopping"]
+    R6["data augmentation"]
+    R7["tree depth / pruning"]
+  end
+  subgraph S6["6 · Optimize"]
+    direction TB
+    O1["closed form"]
+    O2["full-batch GD"]
+    O3["stochastic GD"]
+    O4["mini-batch GD"]
+    O5["momentum / Adam"]
+    O6["Newton (Hessian)"]
+    O7["coordinate descent"]
+    O8["EM algorithm"]
+    O9["greedy tree splits"]
+  end
+  subgraph S7["7 · Evaluate"]
+    direction TB
+    E1["MSE, R²"]
+    E2["accuracy, precision,<br/>recall, ROC-AUC"]
+    E3["silhouette"]
+    E4["calibration"]
+    E5["over- vs underfitting"]
+    E6["tune hyperparameters"]
+  end
+  subgraph S8["8 · Interpret & predict"]
+    direction TB
+    I1["feature importance / SHAP"]
+    I2["predict new samples,<br/>same preprocessing"]
+    I3["extrapolation warnings"]
+  end
+  S5 --> S6 --> S7 --> S8
+
+  classDef option fill:#FFFFFF,stroke:#999999,color:#2C2C2A
+  style S5 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S6 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S7 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S8 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  class R1,R2,R3,R4,R5,R6,R7,O1,O2,O3,O4,O5,O6,O7,O8,O9,E1,E2,E3,E4,E5,E6,I1,I2,I3 option
+```
+
+*If evaluation isn't good enough, go back to step 2, 3 or 5 and change a choice, but never tune on the test set.*
+
+## Map 7: Strategies and approaches that cut across everything
+: Strategies and approaches that cut across everything
+
+*These are not paradigms or models. They are ways of working that can be combined with almost any of them.*
+
+```{mermaid}
+%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  subgraph A1["Statistical approach: how you treat the unknown parameters"]
+    direction TB
+    F1["Frequentist / MLE<br/>find the single best w"]
+    B1["Bayesian<br/>prior × likelihood → posterior over w"]
+    MAP["MAP estimate<br/>the peak of the posterior"]
+    B1 --> MAP
+    MAP --> RID["Ridge = MAP with a Gaussian prior<br/>Lasso = MAP with a Laplace prior"]
+  end
+  subgraph A2["Learning strategies"]
+    direction TB
+    T1["Transfer learning and fine-tuning<br/>pretrain big, adapt to your small dataset"]
+    T2["Active learning<br/>model picks the next experiment"]
+    T3["Online learning<br/>update as new data streams in"]
+    T4["Multi-task learning<br/>one model, several related outputs"]
+    T5["Ensembling<br/>bagging, boosting, stacking"]
+    T6["Federated learning<br/>train across hospitals without sharing data"]
+  end
+  subgraph A3["Model properties"]
+    direction TB
+    D1["Discriminative: models p(y given x)<br/>logistic regression, most neural nets"]
+    D2["Generative: models p(x, y) or p(x)<br/>naive Bayes, HMMs, VAEs, diffusion"]
+    D3["Parametric: fixed number of parameters<br/>linear models, neural nets"]
+    D4["Non-parametric: grows with the data<br/>k-NN, Gaussian processes, trees"]
+  end
+
+  classDef strategy fill:#F1E6F7,stroke:#7D3C98,stroke-width:2px,color:#2C2C2A
+  class F1,B1,MAP,RID,T1,T2,T3,T4,T5,T6,D1,D2,D3,D4 strategy
+  style A1 fill:#FAFAF8,stroke:#BBBBBB
+  style A2 fill:#FAFAF8,stroke:#BBBBBB
+  style A3 fill:#FAFAF8,stroke:#BBBBBB
+```
+
+
+## Map 8: The math underneath, and where each tool is used
+
+```{mermaid}
+%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  subgraph LA["Linear algebra"]
+    direction TB
+    LA1["<b>Vectors, matrices, dot products</b><br/>→ linear models, every neural-net layer"]
+    LA2["<b>Eigendecomposition / SVD</b><br/>→ PCA"]
+  end
+  subgraph CA["Calculus"]
+    direction TB
+    CA1["<b>Gradient</b><br/>→ gradient descent"]
+    CA2["<b>Chain rule + Jacobian</b><br/>→ backpropagation"]
+    CA3["<b>Hessian</b><br/>→ Newton's method, curvature,<br/>max learning rate"]
+    CA4["<b>Gradient flow ODE</b><br/>→ gradient descent = Euler steps"]
+  end
+  subgraph PS["Probability & statistics"]
+    direction TB
+    PS1["<b>Likelihood / MLE</b><br/>→ where losses come from"]
+    PS2["<b>Bayes' rule</b><br/>→ Bayesian models, naive Bayes, HMMs"]
+    PS3["<b>Entropy</b><br/>→ cross-entropy, tree splits"]
+    PS4["<b>KL divergence</b><br/>→ VAEs, comparing distributions"]
+  end
+  classDef math fill:#EEEEEE,stroke:#555555,stroke-width:2px,color:#2C2C2A
+  class LA1,LA2,CA1,CA2,CA3,CA4,PS1,PS2,PS3,PS4 math
+  style LA fill:#FAFAF8,stroke:#BBBBBB
+  style CA fill:#FAFAF8,stroke:#BBBBBB
+  style PS fill:#FAFAF8,stroke:#BBBBBB
+```

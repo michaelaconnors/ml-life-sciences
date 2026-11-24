@@ -1,8 +1,27 @@
 ---
 title: "ML in Life Sciences"
 ---
-Predicting disease from data: $\hat{\mathbf y} = X\mathbf w + b\mathbf 1$
+Machine learning in biology is a set of choices: what kind of task you have,
+what model you use, and how you train and evaluate it. This site maps them out,
+then walks through each one on real biological data.
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+```{mermaid}
+flowchart TD
+  ML["What does your training data look like?"]
+  ML --> S["<b>Supervised</b><br/>inputs + answers"]
+  ML --> U["<b>Unsupervised</b><br/>inputs only"]
+  ML --> SS["<b>Self-supervised</b><br/>model hides & predicts parts of input"]
+  ML --> SEMI["<b>Semi-supervised</b><br/>few answers, many unlabeled"]
+  ML --> RL["<b>Reinforcement</b><br/>actions + rewards"]
+  S --> R["Regression<br/><i>disease progression</i>"]
+  S --> C["Classification<br/><i>tumor malignancy</i>"]
+  S --> SV["Time-to-event<br/><i>patient survival</i>"]
+  S --> SL["Sequence labeling<br/><i>per-residue structure</i>"]
+  U --> CL["Clustering<br/><i>cell types</i>"]
+  U --> DR["Dimensionality reduction<br/><i>PCA on expression</i>"]
+  U --> G["Generative / density<br/><i>denoising sequencing data</i>"]
+  U --> AN["Anomaly detection<br/><i>contaminated samples</i>"]
+  SS --> PLM["Pretraining<br/><i>protein language models</i>"]
+  SEMI --> SP["<i>labeling slides</i>"]
+  RL --> MD["<i>molecule design</i>"]
+```
