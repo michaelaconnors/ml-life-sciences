@@ -1,0 +1,16 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ML in Life Sciences",
+    "section": "",
+    "text": "Predicting disease from data: \\(\\hat{\\mathbf y} = X\\mathbf w + b\\mathbf 1\\)\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  }
+]
