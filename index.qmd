@@ -1,0 +1,8 @@
+---
+title: "ML in Life Sciences"
+---
+Predicting disease from data: $\hat{\mathbf y} = X\mathbf w + b\mathbf 1$
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
