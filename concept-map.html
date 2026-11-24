@@ -127,10 +127,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#map-1-paradigms-tasks-methods" id="toc-map-1-paradigms-tasks-methods" class="nav-link active" data-scroll-target="#map-1-paradigms-tasks-methods">Map 1: Paradigms → Tasks → Methods</a></li>
-  <li><a href="#map-2-the-pipeline-choices-every-project-makes" id="toc-map-2-the-pipeline-choices-every-project-makes" class="nav-link" data-scroll-target="#map-2-the-pipeline-choices-every-project-makes">Map 2: The pipeline: choices every project makes</a></li>
-  <li><a href="#map-3-strategies-and-approaches-that-cut-across-everything" id="toc-map-3-strategies-and-approaches-that-cut-across-everything" class="nav-link" data-scroll-target="#map-3-strategies-and-approaches-that-cut-across-everything">Map 3: Strategies and approaches that cut across everything</a></li>
-  <li><a href="#map-4-the-math-underneath-and-where-each-tool-is-used" id="toc-map-4-the-math-underneath-and-where-each-tool-is-used" class="nav-link" data-scroll-target="#map-4-the-math-underneath-and-where-each-tool-is-used">Map 4: The math underneath, and where each tool is used</a></li>
+  <li><a href="#map-1-the-paradigms" id="toc-map-1-the-paradigms" class="nav-link active" data-scroll-target="#map-1-the-paradigms">Map 1: The paradigms</a></li>
+  <li><a href="#map-2-supervised-learning-tasks-methods" id="toc-map-2-supervised-learning-tasks-methods" class="nav-link" data-scroll-target="#map-2-supervised-learning-tasks-methods">Map 2: Supervised learning: tasks → methods</a></li>
+  <li><a href="#map-3-unsupervised-learning-tasks-methods" id="toc-map-3-unsupervised-learning-tasks-methods" class="nav-link" data-scroll-target="#map-3-unsupervised-learning-tasks-methods">Map 3: Unsupervised learning: tasks → methods</a></li>
+  <li><a href="#map-4-hybrids-and-reinforcement-learning" id="toc-map-4-hybrids-and-reinforcement-learning" class="nav-link" data-scroll-target="#map-4-hybrids-and-reinforcement-learning">Map 4: Hybrids and reinforcement learning</a></li>
+  <li><a href="#map-5-neural-network-architectures-match-the-shape-of-your-data" id="toc-map-5-neural-network-architectures-match-the-shape-of-your-data" class="nav-link" data-scroll-target="#map-5-neural-network-architectures-match-the-shape-of-your-data">Map 5: Neural network architectures: match the shape of your data</a></li>
+  <li><a href="#map-6-the-pipeline-choices-every-project-makes" id="toc-map-6-the-pipeline-choices-every-project-makes" class="nav-link" data-scroll-target="#map-6-the-pipeline-choices-every-project-makes">Map 6: The pipeline: choices every project makes</a></li>
+  <li><a href="#map-7-strategies-and-approaches-that-cut-across-everything" id="toc-map-7-strategies-and-approaches-that-cut-across-everything" class="nav-link" data-scroll-target="#map-7-strategies-and-approaches-that-cut-across-everything">Map 7: Strategies and approaches that cut across everything</a></li>
+  <li><a href="#map-8-the-math-underneath-and-where-each-tool-is-used" id="toc-map-8-the-math-underneath-and-where-each-tool-is-used" class="nav-link" data-scroll-target="#map-8-the-math-underneath-and-where-each-tool-is-used">Map 8: The math underneath, and where each tool is used</a></li>
   </ul>
 </nav>
     </div>
@@ -224,86 +228,26 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<section id="map-1-paradigms-tasks-methods" class="level2">
-<h2 class="anchored" data-anchor-id="map-1-paradigms-tasks-methods">Map 1: Paradigms → Tasks → Methods</h2>
-<p><em>Read left to right: what your data looks like → what you want to predict or find → the model families that can do it. Dashed lines mark hybrids.</em></p>
+<section id="map-1-the-paradigms" class="level2">
+<h2 class="anchored" data-anchor-id="map-1-the-paradigms">Map 1: The paradigms</h2>
+<p><em>The top of the tree: what your training data looks like. Dashed lines mark hybrids that borrow from two paradigms.</em></p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 
-<pre class="mermaid mermaid-js">flowchart LR
+<pre class="mermaid mermaid-js">%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
   ML(["Machine learning"])
-
   ML --&gt; SUP["&lt;b&gt;Supervised&lt;/b&gt;&lt;br/&gt;inputs + answers"]
   ML --&gt; UNS["&lt;b&gt;Unsupervised&lt;/b&gt;&lt;br/&gt;inputs only"]
   ML --&gt; RL["&lt;b&gt;Reinforcement&lt;/b&gt;&lt;br/&gt;actions + rewards"]
+  SUP -.-&gt; WEAK["&lt;b&gt;Weakly supervised&lt;/b&gt;&lt;br/&gt;coarse or noisy answers"]
   SUP -.-&gt; SEMI["&lt;b&gt;Semi-supervised&lt;/b&gt;&lt;br/&gt;few answers + many unlabeled"]
   UNS -.-&gt; SEMI
   SUP -.-&gt; SELF["&lt;b&gt;Self-supervised&lt;/b&gt;&lt;br/&gt;answers made from the input itself"]
   UNS -.-&gt; SELF
-  SUP -.-&gt; WEAK["&lt;b&gt;Weakly supervised&lt;/b&gt;&lt;br/&gt;coarse or noisy answers"]
-
-  SUP --&gt; REG["Regression&lt;br/&gt;&lt;i&gt;y is a number&lt;/i&gt;&lt;br/&gt;disease progression"]
-  SUP --&gt; CLS["Classification&lt;br/&gt;&lt;i&gt;y is a category&lt;/i&gt;"]
-  CLS --&gt; BIN["Binary&lt;br/&gt;malignant vs benign"]
-  CLS --&gt; MCL["Multiclass&lt;br/&gt;one of 10 cell types"]
-  CLS --&gt; MLB["Multilabel&lt;br/&gt;protein with several functions"]
-  SUP --&gt; SURV["Time-to-event / survival&lt;br/&gt;time to relapse, some not yet observed"]
-  SUP --&gt; SEQL["Per-position labeling&lt;br/&gt;exon vs intron at each base"]
-  SUP --&gt; STRP["Structured prediction&lt;br/&gt;a whole 3D protein structure"]
-
-  REG --&gt; SMF["Supervised model families&lt;br/&gt;&lt;i&gt;most do regression AND classification&lt;/i&gt;"]
-  CLS --&gt; SMF
-  SMF --&gt; LIN["Linear models&lt;br/&gt;linear and logistic regression, GLMs"]
-  SMF --&gt; KNN["k-nearest neighbors"]
-  SMF --&gt; NBY["Naive Bayes"]
-  SMF --&gt; SVM["Support vector machines"]
-  SMF --&gt; GPR["Gaussian processes"]
-  SMF --&gt; TREE["Decision trees"]
-  TREE --&gt; ENS["Tree ensembles&lt;br/&gt;random forest, gradient boosting"]
-  SMF --&gt; NN["Neural networks"]
-  NN --&gt; MLP["MLP / fully connected&lt;br/&gt;tabular data"]
-  NN --&gt; CNN["CNN&lt;br/&gt;DNA motifs, microscopy images"]
-  NN --&gt; RNN["RNN / LSTM&lt;br/&gt;sequences, time series"]
-  NN --&gt; TRF["Transformer&lt;br/&gt;protein sequences, AlphaFold"]
-  NN --&gt; GNN["Graph neural network&lt;br/&gt;molecules, interaction networks"]
-  SURV --&gt; COX["Cox proportional hazards&lt;br/&gt;random survival forests"]
-  SEQL --&gt; HMM["Hidden Markov models&lt;br/&gt;gene finding, protein families"]
-  STRP --&gt; TRF
-
-  UNS --&gt; CLU["Clustering&lt;br/&gt;cell types, strains"]
-  UNS --&gt; DRD["Dimensionality reduction&lt;br/&gt;20,000 genes to a few axes"]
-  UNS --&gt; DEN["Density estimation and generative&lt;br/&gt;model the data, make new samples"]
-  UNS --&gt; ANO["Anomaly detection&lt;br/&gt;contaminated samples, rare cells"]
-  CLU --&gt; KMN["k-means"]
-  CLU --&gt; HCL["Hierarchical clustering"]
-  CLU --&gt; GMM["Gaussian mixture models"]
-  CLU --&gt; DBS["DBSCAN"]
-  CLU --&gt; LEI["Leiden / Louvain graph clustering&lt;br/&gt;standard in single-cell"]
-  DRD --&gt; PCA["PCA&lt;br/&gt;linear"]
-  DRD --&gt; NMF["NMF, ICA, factor analysis"]
-  DRD --&gt; UMP["t-SNE / UMAP&lt;br/&gt;nonlinear, for visualization"]
-  DRD --&gt; AEN["Autoencoders"]
-  DEN --&gt; GMM
-  DEN --&gt; KDE["Kernel density estimation"]
-  DEN --&gt; VAE["VAEs&lt;br/&gt;scVI for single-cell"]
-  DEN --&gt; DIF["Diffusion models&lt;br/&gt;protein design"]
-  DEN --&gt; GAN["GANs"]
-  DEN --&gt; HMM
-  ANO --&gt; ISO["Isolation forest"]
-  ANO --&gt; AEN
-
-  SELF --&gt; MSK["Masked prediction&lt;br/&gt;hide amino acids: ESM protein LMs"]
-  SELF --&gt; NXT["Next-token prediction&lt;br/&gt;generate protein sequences"]
-  SELF --&gt; CON["Contrastive learning&lt;br/&gt;two views of one cell should match"]
-  SEMI --&gt; PSL["Pseudo-labeling / self-training"]
-  SEMI --&gt; LPR["Label propagation"]
-  WEAK --&gt; MIL["Multiple-instance learning&lt;br/&gt;slide-level diagnosis, unlabeled patches"]
-  RL --&gt; QLR["Value-based: Q-learning"]
-  RL --&gt; PGR["Policy gradient"]
-  RL --&gt; BND["Bandits&lt;br/&gt;which experiment to run next"]
 
   classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
   classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
@@ -313,8 +257,79 @@ ul.task-list li input[type="checkbox"] {
   class ML root
   class SUP,UNS,RL paradigm
   class SEMI,SELF,WEAK hybrid
-  class REG,CLS,BIN,MCL,MLB,SURV,SEQL,STRP,CLU,DRD,DEN,ANO,MSK,NXT,CON task
-  class SMF,LIN,KNN,NBY,SVM,GPR,TREE,ENS,NN,MLP,CNN,RNN,TRF,GNN,COX,HMM,KMN,HCL,GMM,DBS,LEI,PCA,NMF,UMP,AEN,KDE,VAE,DIF,GAN,ISO,PSL,LPR,MIL,QLR,PGR,BND method
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="map-2-supervised-learning-tasks-methods" class="level2">
+<h2 class="anchored" data-anchor-id="map-2-supervised-learning-tasks-methods">Map 2: Supervised learning: tasks → methods</h2>
+<p><em>Blue = the kind of answer you want. Green = model families that can produce it. Many families appear under several tasks: they are tools, not categories.</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  SUP["&lt;b&gt;Supervised&lt;/b&gt;"]
+  SUP --&gt; REG["&lt;b&gt;Regression&lt;/b&gt;&lt;br/&gt;y is a number&lt;br/&gt;&lt;i&gt;disease progression&lt;/i&gt;"]
+  SUP --&gt; CLS["&lt;b&gt;Classification&lt;/b&gt;&lt;br/&gt;y is a category&lt;br/&gt;binary · multiclass · multilabel&lt;br/&gt;&lt;i&gt;tumor malignancy, cell type&lt;/i&gt;"]
+  SUP --&gt; SURV["&lt;b&gt;Time-to-event&lt;/b&gt;&lt;br/&gt;time until something happens&lt;br/&gt;&lt;i&gt;time to relapse&lt;/i&gt;"]
+  SUP --&gt; SEQL["&lt;b&gt;Per-position labeling&lt;/b&gt;&lt;br/&gt;a label at every position&lt;br/&gt;&lt;i&gt;exon vs intron at each base&lt;/i&gt;"]
+  SUP --&gt; STRP["&lt;b&gt;Structured prediction&lt;/b&gt;&lt;br/&gt;a whole object as output&lt;br/&gt;&lt;i&gt;3D protein structure&lt;/i&gt;"]
+  REG --&gt; MREG["linear regression&lt;br/&gt;k-nearest neighbors&lt;br/&gt;support vector regression&lt;br/&gt;Gaussian processes&lt;br/&gt;trees · random forest · boosting&lt;br/&gt;neural networks"]
+  CLS --&gt; MCLS["logistic regression&lt;br/&gt;naive Bayes&lt;br/&gt;k-nearest neighbors&lt;br/&gt;support vector machines&lt;br/&gt;trees · random forest · boosting&lt;br/&gt;neural networks"]
+  SURV --&gt; MSURV["Cox proportional hazards&lt;br/&gt;random survival forests&lt;br/&gt;neural survival models"]
+  SEQL --&gt; MSEQ["hidden Markov models&lt;br/&gt;RNNs / LSTMs&lt;br/&gt;transformers"]
+  STRP --&gt; MSTR["transformers + geometry modules&lt;br/&gt;&lt;i&gt;AlphaFold&lt;/i&gt;"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class SUP paradigm
+  class REG,CLS,SURV,SEQL,STRP task
+  class MREG,MCLS,MSURV,MSEQ,MSTR method
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="map-3-unsupervised-learning-tasks-methods" class="level2">
+<h2 class="anchored" data-anchor-id="map-3-unsupervised-learning-tasks-methods">Map 3: Unsupervised learning: tasks → methods</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  UNS["&lt;b&gt;Unsupervised&lt;/b&gt;"]
+  UNS --&gt; CLU["&lt;b&gt;Clustering&lt;/b&gt;&lt;br/&gt;find groups&lt;br/&gt;&lt;i&gt;cell types, strains&lt;/i&gt;"]
+  UNS --&gt; DRD["&lt;b&gt;Dimensionality reduction&lt;/b&gt;&lt;br/&gt;few axes that keep the variation&lt;br/&gt;&lt;i&gt;20,000 genes → 2–50 axes&lt;/i&gt;"]
+  UNS --&gt; DEN["&lt;b&gt;Density estimation &amp; generative&lt;/b&gt;&lt;br/&gt;model the data, make new samples&lt;br/&gt;&lt;i&gt;denoise sequencing data&lt;/i&gt;"]
+  UNS --&gt; ANO["&lt;b&gt;Anomaly detection&lt;/b&gt;&lt;br/&gt;find the odd samples&lt;br/&gt;&lt;i&gt;contaminated runs, rare cells&lt;/i&gt;"]
+  CLU --&gt; MCLU["k-means&lt;br/&gt;hierarchical clustering&lt;br/&gt;Gaussian mixture models&lt;br/&gt;DBSCAN&lt;br/&gt;Leiden / Louvain &lt;i&gt;(single-cell)&lt;/i&gt;"]
+  DRD --&gt; MDRD["PCA &lt;i&gt;(linear)&lt;/i&gt;&lt;br/&gt;NMF · ICA · factor analysis&lt;br/&gt;t-SNE · UMAP &lt;i&gt;(nonlinear, visualization)&lt;/i&gt;&lt;br/&gt;autoencoders"]
+  DEN --&gt; MDEN["kernel density estimation&lt;br/&gt;Gaussian mixture models&lt;br/&gt;hidden Markov models&lt;br/&gt;VAEs &lt;i&gt;(scVI)&lt;/i&gt;&lt;br/&gt;diffusion models · GANs"]
+  ANO --&gt; MANO["isolation forest&lt;br/&gt;autoencoder reconstruction error&lt;br/&gt;distance from cluster centers"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class UNS paradigm
+  class CLU,DRD,DEN,ANO task
+  class MCLU,MDRD,MDEN,MANO method
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -331,110 +346,34 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Why some methods appear in several places:</strong> a method is a tool, not a category. <strong>PCA</strong> is a standalone unsupervised method, but it is <em>also</em> used as a preprocessing step inside supervised pipelines (see Map 2). <strong>HMMs</strong> label sequences and also model densities. <strong>Autoencoders</strong> reduce dimensions and also detect anomalies.</p>
+<p><strong>PCA is in two places on this site.</strong> Here it is a standalone method (explore your data). In the pipeline map below, it is also a <em>preprocessing step</em> inside a bigger model, e.g.&nbsp;normalize → PCA → cluster in single-cell analysis.</p>
 </div>
 </div>
 </section>
-<section id="map-2-the-pipeline-choices-every-project-makes" class="level2">
-<h2 class="anchored" data-anchor-id="map-2-the-pipeline-choices-every-project-makes">Map 2: The pipeline: choices every project makes</h2>
-<p><em>Whatever paradigm and model you choose, you walk through these steps. Yellow = the step; white = the options at that step.</em></p>
+<section id="map-4-hybrids-and-reinforcement-learning" class="level2">
+<h2 class="anchored" data-anchor-id="map-4-hybrids-and-reinforcement-learning">Map 4: Hybrids and reinforcement learning</h2>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 
-<pre class="mermaid mermaid-js">flowchart TB
-  subgraph S0["0 · Question and data"]
-    direction TB
-    Q1["What is one sample? What is y?"]
-    Q2["How many samples n vs features p?"]
-  end
-  subgraph S1["1 · Split the data FIRST"]
-    direction TB
-    SP1["Train / validation / test"]
-    SP2["k-fold cross-validation"]
-    SP3["Leakage: never let test data touch training"]
-  end
-  subgraph S2["2 · Preprocessing"]
-    direction TB
-    P1["Center / standardize features"]
-    P2["Log-transform counts"]
-    P3["Normalize library size, RNA-seq"]
-    P4["Batch-effect correction"]
-    P5["Impute missing values"]
-    P6["One-hot encode categories"]
-    P7["Feature selection"]
-    P8["PCA as preprocessing"]
-  end
-  subgraph S3["3 · Model family"]
-    direction TB
-    M1["See Map 1"]
-    M2["Hyperparameters: set by you, not learned"]
-  end
-  subgraph S4["4 · Loss function"]
-    direction TB
-    L1["MSE: Gaussian noise"]
-    L2["MAE / Huber: outliers"]
-    L3["Binary cross-entropy"]
-    L4["Categorical cross-entropy"]
-    L5["Hinge: SVMs"]
-    L6["Poisson / negative binomial: count data"]
-    L7["Cox partial likelihood: survival"]
-    L8["Reconstruction + KL: VAEs"]
-    L9["Contrastive loss"]
-  end
-  subgraph S5["5 · Regularization: fight overfitting"]
-    direction TB
-    R1["Ridge, L2"]
-    R2["Lasso, L1: sparse"]
-    R3["Elastic net, L1 + L2"]
-    R4["Dropout"]
-    R5["Early stopping"]
-    R6["Data augmentation"]
-    R7["Tree depth limits / pruning"]
-  end
-  subgraph S6["6 · Optimizer: how to minimize the loss"]
-    direction TB
-    O1["Closed form: normal equation"]
-    O2["Full-batch gradient descent"]
-    O3["Stochastic gradient descent, 1 sample"]
-    O4["Mini-batch gradient descent"]
-    O5["Momentum / Adam"]
-    O6["Newton's method: uses the Hessian"]
-    O7["Coordinate descent: lasso"]
-    O8["EM algorithm: GMMs, HMMs"]
-    O9["Greedy splitting: trees"]
-  end
-  subgraph S7["7 · Evaluation"]
-    direction TB
-    E1["Regression: MSE, R²"]
-    E2["Classification: accuracy, precision, recall, ROC-AUC, confusion matrix"]
-    E3["Clustering: silhouette, agreement with known labels"]
-    E4["Calibration: are probabilities honest?"]
-    E5["Diagnose: overfitting vs underfitting, bias-variance trade-off"]
-    E6["Tune hyperparameters on validation data"]
-  end
-  subgraph S8["8 · Interpretation and inference"]
-    direction TB
-    I1["Feature importance / SHAP"]
-    I2["Predict new samples, same preprocessing"]
-    I3["Extrapolation warnings"]
-  end
-  S0 --&gt; S1 --&gt; S2 --&gt; S3 --&gt; S4 --&gt; S5 --&gt; S6 --&gt; S7 --&gt; S8
-  S7 -. "not good enough? go back" .-&gt; S2
+<pre class="mermaid mermaid-js">%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  SELF["&lt;b&gt;Self-supervised&lt;/b&gt;"] --&gt; TSELF["&lt;b&gt;Pretext tasks&lt;/b&gt;&lt;br/&gt;masked prediction &lt;i&gt;(ESM protein LMs)&lt;/i&gt;&lt;br/&gt;next-token prediction &lt;i&gt;(protein generation)&lt;/i&gt;&lt;br/&gt;contrastive learning &lt;i&gt;(two views should match)&lt;/i&gt;"]
+  SEMI["&lt;b&gt;Semi-supervised&lt;/b&gt;"] --&gt; MSEMI["pseudo-labeling / self-training&lt;br/&gt;label propagation"]
+  WEAK["&lt;b&gt;Weakly supervised&lt;/b&gt;"] --&gt; MWEAK["multiple-instance learning&lt;br/&gt;&lt;i&gt;slide-level diagnosis,&lt;br/&gt;unlabeled image patches&lt;/i&gt;"]
+  RL["&lt;b&gt;Reinforcement&lt;/b&gt;"] --&gt; MRL["value-based: Q-learning&lt;br/&gt;policy gradient&lt;br/&gt;bandits &lt;i&gt;(which experiment next)&lt;/i&gt;"]
 
-  classDef option fill:#FFFFFF,stroke:#999999,color:#2C2C2A
-  class Q1,Q2,SP1,SP2,SP3,P1,P2,P3,P4,P5,P6,P7,P8,M1,M2,L1,L2,L3,L4,L5,L6,L7,L8,L9,R1,R2,R3,R4,R5,R6,R7,O1,O2,O3,O4,O5,O6,O7,O8,O9,E1,E2,E3,E4,E5,E6,I1,I2,I3 option
-  style S0 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
-  style S1 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
-  style S2 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
-  style S3 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
-  style S4 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
-  style S5 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
-  style S6 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
-  style S7 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
-  style S8 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class RL paradigm
+  class SELF,SEMI,WEAK hybrid
+  class TSELF task
+  class MSEMI,MWEAK,MRL method
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -442,8 +381,166 @@ Note
 </div>
 </div>
 </section>
-<section id="map-3-strategies-and-approaches-that-cut-across-everything" class="level2">
-<h2 class="anchored" data-anchor-id="map-3-strategies-and-approaches-that-cut-across-everything">Map 3: Strategies and approaches that cut across everything</h2>
+<section id="map-5-neural-network-architectures-match-the-shape-of-your-data" class="level2">
+<h2 class="anchored" data-anchor-id="map-5-neural-network-architectures-match-the-shape-of-your-data">Map 5: Neural network architectures: match the shape of your data</h2>
+<p><em>“Neural network” appears in almost every map above. The architecture is chosen to fit the structure of one input sample.</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
+  NN["&lt;b&gt;Neural networks&lt;/b&gt;"]
+  NN --&gt; MLP["&lt;b&gt;MLP&lt;/b&gt;&lt;br/&gt;fully connected&lt;br/&gt;one sample = a row of numbers&lt;br/&gt;&lt;i&gt;clinical measurements&lt;/i&gt;"]
+  NN --&gt; CNN["&lt;b&gt;CNN&lt;/b&gt;&lt;br/&gt;local patterns&lt;br/&gt;one sample = an image or sequence&lt;br/&gt;&lt;i&gt;DNA motifs, microscopy&lt;/i&gt;"]
+  NN --&gt; RNN["&lt;b&gt;RNN / LSTM&lt;/b&gt;&lt;br/&gt;step-by-step memory&lt;br/&gt;one sample = a sequence in time&lt;br/&gt;&lt;i&gt;expression time course&lt;/i&gt;"]
+  NN --&gt; TRF["&lt;b&gt;Transformer&lt;/b&gt;&lt;br/&gt;attention, long-range links&lt;br/&gt;one sample = a long sequence&lt;br/&gt;&lt;i&gt;proteins, AlphaFold&lt;/i&gt;"]
+  NN --&gt; GNN["&lt;b&gt;Graph neural network&lt;/b&gt;&lt;br/&gt;message passing&lt;br/&gt;one sample = a graph&lt;br/&gt;&lt;i&gt;molecules, interaction networks&lt;/i&gt;"]
+
+  classDef paradigm fill:#FDE2E0,stroke:#C0392B,stroke-width:2px,color:#2C2C2A
+  classDef hybrid fill:#FCEBD9,stroke:#D35400,stroke-width:2px,stroke-dasharray:6 4,color:#2C2C2A
+  classDef task fill:#E3EDFB,stroke:#1B4CA8,stroke-width:2px,color:#2C2C2A
+  classDef method fill:#E3F3EC,stroke:#0E6B58,stroke-width:2px,color:#2C2C2A
+  classDef root fill:#2C2C2A,stroke:#2C2C2A,color:#FFFFFF
+  class NN method
+  class MLP,CNN,RNN,TRF,GNN method
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="map-6-the-pipeline-choices-every-project-makes" class="level2">
+<h2 class="anchored" data-anchor-id="map-6-the-pipeline-choices-every-project-makes">Map 6: The pipeline: choices every project makes</h2>
+<p><em>Read left to right. Yellow = the step; white = the options at that step.</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">flowchart LR
+  subgraph S0["0 · Question &amp; data"]
+    direction TB
+    Q1["What is one sample?&lt;br/&gt;What is y?"]
+    Q2["n samples vs&lt;br/&gt;p features"]
+  end
+  subgraph S1["1 · Split FIRST"]
+    direction TB
+    SP1["train / validation / test"]
+    SP2["k-fold cross-validation"]
+    SP3["avoid leakage"]
+  end
+  subgraph S2["2 · Preprocess"]
+    direction TB
+    P1["center / standardize"]
+    P2["log-transform counts"]
+    P3["normalize library size"]
+    P4["batch-effect correction"]
+    P5["impute missing values"]
+    P6["one-hot encode"]
+    P7["feature selection"]
+    P8["PCA"]
+  end
+  subgraph S3["3 · Model"]
+    direction TB
+    M1["see Maps 2–5"]
+    M2["hyperparameters:&lt;br/&gt;set by you"]
+  end
+  subgraph S4["4 · Loss"]
+    direction TB
+    L1["MSE"]
+    L2["MAE / Huber"]
+    L3["binary cross-entropy"]
+    L4["categorical cross-entropy"]
+    L5["hinge"]
+    L6["Poisson / neg. binomial"]
+    L7["Cox partial likelihood"]
+    L8["reconstruction + KL"]
+    L9["contrastive"]
+  end
+  S0 --&gt; S1 --&gt; S2 --&gt; S3 --&gt; S4
+
+  classDef option fill:#FFFFFF,stroke:#999999,color:#2C2C2A
+  style S0 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S1 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S2 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S3 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S4 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  class Q1,Q2,SP1,SP2,SP3,P1,P2,P3,P4,P5,P6,P7,P8,M1,M2,L1,L2,L3,L4,L5,L6,L7,L8,L9 option
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><em>…continued:</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">flowchart LR
+  subgraph S5["5 · Regularize"]
+    direction TB
+    R1["ridge, L2"]
+    R2["lasso, L1"]
+    R3["elastic net"]
+    R4["dropout"]
+    R5["early stopping"]
+    R6["data augmentation"]
+    R7["tree depth / pruning"]
+  end
+  subgraph S6["6 · Optimize"]
+    direction TB
+    O1["closed form"]
+    O2["full-batch GD"]
+    O3["stochastic GD"]
+    O4["mini-batch GD"]
+    O5["momentum / Adam"]
+    O6["Newton (Hessian)"]
+    O7["coordinate descent"]
+    O8["EM algorithm"]
+    O9["greedy tree splits"]
+  end
+  subgraph S7["7 · Evaluate"]
+    direction TB
+    E1["MSE, R²"]
+    E2["accuracy, precision,&lt;br/&gt;recall, ROC-AUC"]
+    E3["silhouette"]
+    E4["calibration"]
+    E5["over- vs underfitting"]
+    E6["tune hyperparameters"]
+  end
+  subgraph S8["8 · Interpret &amp; predict"]
+    direction TB
+    I1["feature importance / SHAP"]
+    I2["predict new samples,&lt;br/&gt;same preprocessing"]
+    I3["extrapolation warnings"]
+  end
+  S5 --&gt; S6 --&gt; S7 --&gt; S8
+
+  classDef option fill:#FFFFFF,stroke:#999999,color:#2C2C2A
+  style S5 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S6 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S7 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  style S8 fill:#FFF6D6,stroke:#B7950B,stroke-width:2px
+  class R1,R2,R3,R4,R5,R6,R7,O1,O2,O3,O4,O5,O6,O7,O8,O9,E1,E2,E3,E4,E5,E6,I1,I2,I3 option
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><em>If evaluation isn’t good enough, go back to step 2, 3 or 5 and change a choice, but never tune on the test set.</em></p>
+</section>
+<section id="map-7-strategies-and-approaches-that-cut-across-everything" class="level2">
+<h2 class="anchored" data-anchor-id="map-7-strategies-and-approaches-that-cut-across-everything">Map 7: Strategies and approaches that cut across everything</h2>
+<p>: Strategies and approaches that cut across everything</p>
 <p><em>These are not paradigms or models. They are ways of working that can be combined with almost any of them.</em></p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -451,7 +548,8 @@ Note
 <p></p><figure class="figure"><p></p>
 <div>
 
-<pre class="mermaid mermaid-js">flowchart TB
+<pre class="mermaid mermaid-js">%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
   subgraph A1["Statistical approach: how you treat the unknown parameters"]
     direction TB
     F1["Frequentist / MLE&lt;br/&gt;find the single best w"]
@@ -489,52 +587,37 @@ Note
 </div>
 </div>
 </section>
-<section id="map-4-the-math-underneath-and-where-each-tool-is-used" class="level2">
-<h2 class="anchored" data-anchor-id="map-4-the-math-underneath-and-where-each-tool-is-used">Map 4: The math underneath, and where each tool is used</h2>
+<section id="map-8-the-math-underneath-and-where-each-tool-is-used" class="level2">
+<h2 class="anchored" data-anchor-id="map-8-the-math-underneath-and-where-each-tool-is-used">Map 8: The math underneath, and where each tool is used</h2>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 
-<pre class="mermaid mermaid-js">flowchart LR
+<pre class="mermaid mermaid-js">%%{init: {"flowchart": {"wrappingWidth": 280}}}%%
+flowchart TB
   subgraph LA["Linear algebra"]
     direction TB
-    LA1["Vectors, matrices, dot products"]
-    LA2["Eigendecomposition / SVD"]
+    LA1["&lt;b&gt;Vectors, matrices, dot products&lt;/b&gt;&lt;br/&gt;→ linear models, every neural-net layer"]
+    LA2["&lt;b&gt;Eigendecomposition / SVD&lt;/b&gt;&lt;br/&gt;→ PCA"]
   end
   subgraph CA["Calculus"]
     direction TB
-    CA1["Gradient"]
-    CA2["Chain rule"]
-    CA3["Jacobian"]
-    CA4["Hessian"]
-    CA5["Gradient flow ODE"]
+    CA1["&lt;b&gt;Gradient&lt;/b&gt;&lt;br/&gt;→ gradient descent"]
+    CA2["&lt;b&gt;Chain rule + Jacobian&lt;/b&gt;&lt;br/&gt;→ backpropagation"]
+    CA3["&lt;b&gt;Hessian&lt;/b&gt;&lt;br/&gt;→ Newton's method, curvature,&lt;br/&gt;max learning rate"]
+    CA4["&lt;b&gt;Gradient flow ODE&lt;/b&gt;&lt;br/&gt;→ gradient descent = Euler steps"]
   end
-  subgraph PS["Probability and statistics"]
+  subgraph PS["Probability &amp; statistics"]
     direction TB
-    PS1["Likelihood / MLE"]
-    PS2["Bayes' rule"]
-    PS3["Entropy"]
-    PS4["KL divergence"]
+    PS1["&lt;b&gt;Likelihood / MLE&lt;/b&gt;&lt;br/&gt;→ where losses come from"]
+    PS2["&lt;b&gt;Bayes' rule&lt;/b&gt;&lt;br/&gt;→ Bayesian models, naive Bayes, HMMs"]
+    PS3["&lt;b&gt;Entropy&lt;/b&gt;&lt;br/&gt;→ cross-entropy, tree splits"]
+    PS4["&lt;b&gt;KL divergence&lt;/b&gt;&lt;br/&gt;→ VAEs, comparing distributions"]
   end
-
-  LA1 --&gt; U1["Linear models and every neural-net layer: Xw + b"]
-  LA2 --&gt; U2["PCA"]
-  CA1 --&gt; U3["Gradient descent"]
-  CA2 --&gt; U4["Backpropagation in neural nets"]
-  CA3 --&gt; U4
-  CA4 --&gt; U5["Newton's method, curvature, max learning rate"]
-  CA5 --&gt; U6["Gradient descent = Euler steps"]
-  PS1 --&gt; U7["Where loss functions come from: MSE, cross-entropy"]
-  PS2 --&gt; U8["Bayesian models, naive Bayes, HMMs"]
-  PS3 --&gt; U9["Cross-entropy loss, decision-tree splits"]
-  PS4 --&gt; U10["VAEs, comparing distributions"]
-
   classDef math fill:#EEEEEE,stroke:#555555,stroke-width:2px,color:#2C2C2A
-  classDef use fill:#FFFFFF,stroke:#999999,color:#2C2C2A
-  class LA1,LA2,CA1,CA2,CA3,CA4,CA5,PS1,PS2,PS3,PS4 math
-  class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10 use
+  class LA1,LA2,CA1,CA2,CA3,CA4,PS1,PS2,PS3,PS4 math
   style LA fill:#FAFAF8,stroke:#BBBBBB
   style CA fill:#FAFAF8,stroke:#BBBBBB
   style PS fill:#FAFAF8,stroke:#BBBBBB
