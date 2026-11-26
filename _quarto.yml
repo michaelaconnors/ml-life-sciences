@@ -4,9 +4,11 @@ project:
 website:
   title: "ML in Life Sciences"
   navbar:
-    left:
+      left:
       - href: index.qmd
         text: Home
+      - href: warfarin.qmd
+        text: Warfarin Dosing
       - href: concept-map.qmd
         text: Concept Map
       - about.qmd

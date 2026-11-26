@@ -1,0 +1,81 @@
+{
+  "features": [
+    "age_decades",
+    "Height (cm)",
+    "Weight (kg)",
+    "vkorc1_AG",
+    "vkorc1_AA",
+    "vkorc1_unknown",
+    "cyp_12",
+    "cyp_13",
+    "cyp_22",
+    "cyp_23",
+    "cyp_33",
+    "cyp_unknown",
+    "race_asian",
+    "race_black",
+    "race_unknown",
+    "enzyme_inducer",
+    "amiodarone"
+  ],
+  "w_raw": [
+    -0.239044,
+    0.008468,
+    0.013385,
+    -0.84027,
+    -1.589454,
+    -0.656656,
+    -0.478306,
+    -0.890643,
+    -1.148874,
+    -1.830932,
+    -2.140105,
+    -0.402627,
+    -0.313932,
+    -0.109701,
+    -0.165557,
+    1.055443,
+    -0.622104
+  ],
+  "b_raw": 5.482983,
+  "defaults": {
+    "age_decades": 6.0,
+    "height_cm": 167.89399999981867,
+    "weight_kg": 74.8
+  },
+  "ranges": {
+    "age_decades": [
+      1.0,
+      9.0
+    ],
+    "height_cm": [
+      145.51659999984284,
+      190.49999999979426
+    ],
+    "weight_kg": [
+      42.0,
+      145.50500000000002
+    ]
+  },
+  "metrics": {
+    "n_train": 4296,
+    "n_test": 1075,
+    "r2_test": 0.432,
+    "mae_mg_week": 8.89,
+    "pw20": 45.1,
+    "train_mse": 1.097,
+    "test_mse": 1.103
+  },
+  "provenance": {
+    "data": "IWPC_Data.xls, 'Subject Data' sheet (ClinPGx downloads)",
+    "n_total": 5371,
+    "filters": "reached stable dose; dose recorded; age recorded",
+    "target": "sqrt(dose in mg/week)",
+    "test_size": 0.2,
+    "random_state": 0,
+    "imputation": "training median for height and weight",
+    "optimizer": "full-batch gradient descent, eta=0.1, 2000 steps",
+    "trained_on": "2026-11-25",
+    "not_for_clinical_use": true
+  }
+}
