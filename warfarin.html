@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Predicting a warfarin dose – ML in Life Sciences</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d31a0c91b01e363be7b7a36e602e2c70.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">ML in Life Sciences</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./warfarin.html" aria-current="page"> 
+<span class="menu-text">Warfarin Dosing</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./concept-map.html"> 
+<span class="menu-text">Concept Map</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-problem" id="toc-the-problem" class="nav-link active" data-scroll-target="#the-problem">1. The problem</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">2. The data</a>
+  <ul class="collapse">
+  <li><a href="#what-counts-as-an-input" id="toc-what-counts-as-an-input" class="nav-link" data-scroll-target="#what-counts-as-an-input">What counts as an input</a></li>
+  <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering">Filtering</a></li>
+  </ul></li>
+  <li><a href="#the-decision-map" id="toc-the-decision-map" class="nav-link" data-scroll-target="#the-decision-map">3. The decision map</a></li>
+  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model">4. The model</a></li>
+  <li><a href="#the-loss-and-why-the-target-is-square-rooted" id="toc-the-loss-and-why-the-target-is-square-rooted" class="nav-link" data-scroll-target="#the-loss-and-why-the-target-is-square-rooted">5. The loss, and why the target is square-rooted</a>
+  <ul class="collapse">
+  <li><a href="#why-squared-error" id="toc-why-squared-error" class="nav-link" data-scroll-target="#why-squared-error">Why squared error</a></li>
+  <li><a href="#why-sqrttextdose" id="toc-why-sqrttextdose" class="nav-link" data-scroll-target="#why-sqrttextdose">Why <span class="math inline">\(\sqrt{\text{dose}}\)</span></a></li>
+  </ul></li>
+  <li><a href="#training" id="toc-training" class="nav-link" data-scroll-target="#training">6. Training</a>
+  <ul class="collapse">
+  <li><a href="#the-gradient" id="toc-the-gradient" class="nav-link" data-scroll-target="#the-gradient">The gradient</a></li>
+  <li><a href="#the-code" id="toc-the-code" class="nav-link" data-scroll-target="#the-code">The code</a></li>
+  <li><a href="#does-it-find-the-right-answer" id="toc-does-it-find-the-right-answer" class="nav-link" data-scroll-target="#does-it-find-the-right-answer">Does it find the right answer?</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">7. Results</a>
+  <ul class="collapse">
+  <li><a href="#testing-the-gaussian-assumption" id="toc-testing-the-gaussian-assumption" class="nav-link" data-scroll-target="#testing-the-gaussian-assumption">Testing the Gaussian assumption</a></li>
+  </ul></li>
+  <li><a href="#comparison-with-the-published-algorithm" id="toc-comparison-with-the-published-algorithm" class="nav-link" data-scroll-target="#comparison-with-the-published-algorithm">8. Comparison with the published algorithm</a></li>
+  <li><a href="#try-it" id="toc-try-it" class="nav-link" data-scroll-target="#try-it">9. Try it</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">10. Limitations</a></li>
+  <li><a href="#code-and-sources" id="toc-code-and-sources" class="nav-link" data-scroll-target="#code-and-sources">11. Code and sources</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Predicting a warfarin dose</h1>
+<p class="subtitle lead">Supervised learning → regression → linear model, built from scratch on 5,371 patients</p>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Not medical advice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page reproduces a published research algorithm as a learning exercise. The predictions here must <strong>not</strong> be used to dose any real patient. Warfarin dosing is done by clinicians using INR monitoring.</p>
+</div>
+</div>
+<section id="the-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-problem">1. The problem</h2>
+<p>Warfarin is a blood thinner given to people at risk of dangerous clots — atrial fibrillation, mechanical heart valves, or a history of deep-vein thrombosis. It has been prescribed tens of millions of times a year.</p>
+<p>It is also hard to dose. Too little and the patient can throw a clot and have a stroke. Too much and they can bleed. The dose that keeps a patient in the safe range varies <strong>10- to 20-fold between individuals</strong>, and the usual approach is to start everyone near a standard dose and adjust over several weeks using a blood test called the <strong>INR</strong> (international normalised ratio), which measures how slowly the blood clots. Those first weeks, before the dose settles, are the dangerous period.</p>
+<p><strong>The machine learning question:</strong> can we predict a patient’s stable dose on day one, from information a doctor already has?</p>
+<p>Two genes make this a pharmacogenetics problem rather than a purely clinical one:</p>
+<ul>
+<li><strong>CYP2C9</strong> is the liver enzyme that <strong>breaks warfarin down</strong>. Slower variants mean the drug lingers, so less is needed.</li>
+<li><strong>VKORC1</strong> is the protein that warfarin <strong>blocks</strong>. Some variants produce less of it, so there is less to block, and again less drug is needed.</li>
+</ul>
+</section>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">2. The data</h2>
+<p>The <strong>International Warfarin Pharmacogenetics Consortium (IWPC)</strong> pooled clinical and genetic data on 5,700 patients from 21 research groups across 9 countries, all of whom had been on warfarin long enough to reach a stable dose. The dataset is distributed through <a href="https://www.clinpgx.org/downloads">ClinPGx</a> (formerly PharmGKB) and accompanies the 2009 paper <em>Estimation of the warfarin dose with clinical and pharmacogenetic data</em> (PMID: 19228618).</p>
+<p><strong>One sample = one patient.</strong> The raw table has 68 columns. Most are not usable as model inputs, and sorting them was the first real decision.</p>
+<section id="what-counts-as-an-input" class="level3">
+<h3 class="anchored" data-anchor-id="what-counts-as-an-input">What counts as an input</h3>
+<p>The governing rule in any supervised problem:</p>
+<blockquote class="blockquote">
+<p>A feature is only allowed if you would know it <strong>at the moment you need the prediction</strong>.</p>
+</blockquote>
+<p>Here that moment is a doctor about to start a patient on warfarin for the first time. Anything measured afterwards is <strong>leakage</strong> — it makes the model look excellent in testing and useless in practice.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bucket</th>
+<th>Columns</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Target (y)</strong></td>
+<td>Therapeutic dose of warfarin (mg/week)</td>
+<td>what we predict</td>
+</tr>
+<tr class="even">
+<td><strong>Allowed inputs</strong></td>
+<td>age, height, weight, race, genotypes, interacting drugs, target INR</td>
+<td>known before the first dose</td>
+</tr>
+<tr class="odd">
+<td><strong>Leakage</strong></td>
+<td>INR <em>on</em> the reported therapeutic dose</td>
+<td>measured after treatment started</td>
+</tr>
+<tr class="even">
+<td><strong>Filter</strong></td>
+<td>“Subject reached stable dose”</td>
+<td>known only afterwards, so it cannot be an input — but it decides which patients have a trustworthy y</td>
+</tr>
+<tr class="odd">
+<td><strong>Bookkeeping</strong></td>
+<td>IDs, project site, free-text comments, raw and QC genotype columns</td>
+<td>not information about the patient’s biology</td>
+</tr>
+</tbody>
+</table>
+<p>Note that <strong>target INR is not leakage</strong>, even though it contains the letters INR. The doctor <em>chooses</em> the target before treatment begins — usually 2–3, higher for a mechanical valve. Same acronym, different point in time.</p>
+<p>The genotype columns appear three times each — the original lab call, a quality-control recheck, and a reconciled <strong>consensus</strong> value. Only the consensus columns are used; the others would feed the model the same information two or three times.</p>
+</section>
+<section id="filtering" class="level3">
+<h3 class="anchored" data-anchor-id="filtering">Filtering</h3>
+<p>Keeping only patients who reached a stable dose <strong>and</strong> have that dose recorded:</p>
+<p><span class="math display">\[5700 \;\longrightarrow\; 5410 \;\longrightarrow\; 5371\]</span></p>
+<p>(the second step drops 39 patients with no recorded age). Final dataset: <strong>n = 5,371 patients, p = 17 features</strong>.</p>
+</section>
+</section>
+<section id="the-decision-map" class="level2">
+<h2 class="anchored" data-anchor-id="the-decision-map">3. The decision map</h2>
+<p>Every step below is a choice. The option taken is in bold; the alternatives are real options that would have been defensible with different data.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+<pre class="mermaid mermaid-js">flowchart LR
+  A["0 · Define&lt;br/&gt;the problem"] --&gt; B["1 · Choose&lt;br/&gt;features"] --&gt; C["2 · Encode"] --&gt; D["3 · Missing&lt;br/&gt;values"] --&gt; E["4 · Split"]
+  E --&gt; F["5 · Standardise"] --&gt; G["6 · Model&lt;br/&gt;+ loss"] --&gt; H["7 · Optimise"] --&gt; I["8 · Evaluate"] --&gt; J["9 · Interpret&lt;br/&gt;+ predict"]
+  classDef s fill:#FFF6D6,stroke:#B7950B,stroke-width:2px,color:#2C2C2A
+  class A,B,C,D,E,F,G,H,I,J s
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th><strong>Chosen</strong></th>
+<th>Why</th>
+<th>Alternatives considered</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Target</strong></td>
+<td><strong>√(dose)</strong></td>
+<td>raw doses are right-skewed (skew 2.36); √ brings it to 0.60 and matches the published model</td>
+<td>raw dose; log(dose), skew −0.40, slightly <em>more</em> symmetric but not comparable to IWPC</td>
+</tr>
+<tr class="even">
+<td><strong>Features</strong></td>
+<td><strong>the 17 used by the published IWPC pharmacogenetic algorithm</strong></td>
+<td>makes a direct, line-by-line comparison possible</td>
+<td>add the other six VKORC1 variants; drop race; add target INR, indication, comorbidities</td>
+</tr>
+<tr class="odd">
+<td><strong>Genotype encoding</strong></td>
+<td><strong>one 0/1 column per genotype</strong> (“genotypic model”)</td>
+<td>assumes nothing about how two alleles combine; lets the data decide</td>
+<td>allele-count coding (the “additive model”), 1 column instead of 2 — fewer parameters but assumes each copy has an equal effect</td>
+</tr>
+<tr class="even">
+<td><strong>Missing age</strong> (39)</td>
+<td><strong>drop those patients</strong></td>
+<td>0.7% of the data; age matters</td>
+<td>impute</td>
+</tr>
+<tr class="odd">
+<td><strong>Missing height</strong> (19%) and <strong>weight</strong> (5%)</td>
+<td><strong>impute the training median</strong></td>
+<td>dropping would cost a fifth of the dataset</td>
+<td>drop rows; regression imputation; add a “was missing” indicator</td>
+</tr>
+<tr class="even">
+<td><strong>Missing genotype</strong> (VKORC1 27%, CYP2C9 2%)</td>
+<td><strong>its own “unknown” category</strong></td>
+<td>too many to drop, and a doctor often has no genetic test either — the model should still work</td>
+<td>impute the most common genotype (would contaminate the real genotype weights); IWPC also imputed VKORC1 from neighbouring variants in linkage disequilibrium</td>
+</tr>
+<tr class="odd">
+<td><strong>Rare CYP2C9 alleles</strong> (*5, *6, *11, *13, *14: 1–6 patients each)</td>
+<td><strong>folded into “unknown”</strong></td>
+<td>1–6 patients cannot support their own weight</td>
+<td>separate columns; drop those patients</td>
+</tr>
+<tr class="even">
+<td><strong>Missing medication fields</strong> (~57%)</td>
+<td><strong>treated as “not taking”</strong></td>
+<td>most likely sites that did not record the field; the assumption is stated rather than hidden</td>
+<td>treat as unknown with its own column; drop those sites</td>
+</tr>
+<tr class="odd">
+<td><strong>Split</strong></td>
+<td><strong>80 / 20 train–test, fixed seed</strong></td>
+<td>the test set stands in for future patients</td>
+<td>k-fold cross-validation (better use of data, more compute)</td>
+</tr>
+<tr class="even">
+<td><strong>Scaling</strong></td>
+<td><strong>standardise all columns</strong> using training mean and SD only</td>
+<td>features range from 0–1 to ~190; without this the loss surface is a long narrow valley and gradient descent crawls</td>
+<td>no scaling; min–max scaling</td>
+</tr>
+<tr class="odd">
+<td><strong>Model</strong></td>
+<td><strong>linear (single neuron, identity activation)</strong></td>
+<td>simplest baseline; it is also what won in the original study</td>
+<td>random forest, gradient boosting, SVR, neural network</td>
+</tr>
+<tr class="even">
+<td><strong>Loss</strong></td>
+<td><strong>MSE</strong></td>
+<td>continuous target; equivalent to maximum likelihood under Gaussian noise (verified in §7)</td>
+<td>MAE / Huber if outliers dominate</td>
+</tr>
+<tr class="odd">
+<td><strong>Regularisation</strong></td>
+<td><strong>none</strong></td>
+<td>17 weights fitted on 4,296 patients, and train and test error are nearly identical — there is nothing to shrink</td>
+<td>ridge, lasso, elastic net</td>
+</tr>
+<tr class="even">
+<td><strong>Optimiser</strong></td>
+<td><strong>full-batch gradient descent</strong>, η = 0.1, 2,000 steps</td>
+<td>n is small enough that the exact gradient is cheap; written from scratch to show the mechanics</td>
+<td>closed-form normal equation (used here as a check); SGD; mini-batch; Adam</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-model" class="level2">
+<h2 class="anchored" data-anchor-id="the-model">4. The model</h2>
+<p>With one output, the weights form a <strong>vector</strong>, not a matrix. The architecture is a single linear neuron:</p>
+<svg viewbox="0 0 980 420" width="100%" style="max-width:980px;font-family:Inter,'Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <marker id="wa" viewbox="0 0 10 10" refx="9" refy="5" markerwidth="7" markerheight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8a8a85"></path>
+    </marker>
+  </defs>
+  <rect width="980" height="420" fill="none"></rect>
+  <!-- input groups -->
+  <g font-size="13" fill="#1B4CA8">
+    <rect x="10" y="30" width="200" height="48" rx="8" fill="#E8F0FB" stroke="#1B4CA8"></rect>
+    <text x="110" y="50" text-anchor="middle" font-weight="600">Age, height, weight</text>
+    <text x="110" y="68" text-anchor="middle" font-size="11" fill="#555">3 numeric features</text>
+
+    <rect x="10" y="94" width="200" height="48" rx="8" fill="#E8F0FB" stroke="#1B4CA8"></rect>
+    <text x="110" y="114" text-anchor="middle" font-weight="600">VKORC1 −1639</text>
+    <text x="110" y="132" text-anchor="middle" font-size="11" fill="#555">3 indicator columns</text>
+
+    <rect x="10" y="158" width="200" height="48" rx="8" fill="#E8F0FB" stroke="#1B4CA8"></rect>
+    <text x="110" y="178" text-anchor="middle" font-weight="600">CYP2C9 genotype</text>
+    <text x="110" y="196" text-anchor="middle" font-size="11" fill="#555">6 indicator columns</text>
+
+    <rect x="10" y="222" width="200" height="48" rx="8" fill="#E8F0FB" stroke="#1B4CA8"></rect>
+    <text x="110" y="242" text-anchor="middle" font-weight="600">Race</text>
+    <text x="110" y="260" text-anchor="middle" font-size="11" fill="#555">3 indicator columns</text>
+
+    <rect x="10" y="286" width="200" height="48" rx="8" fill="#E8F0FB" stroke="#1B4CA8"></rect>
+    <text x="110" y="306" text-anchor="middle" font-weight="600">Interacting drugs</text>
+    <text x="110" y="324" text-anchor="middle" font-size="11" fill="#555">2 indicator columns</text>
+  </g>
+  <!-- arrows to neuron -->
+  <g stroke="#8a8a85" stroke-width="2" marker-end="url(#wa)" fill="none">
+    <path d="M210,54  C300,54  320,170 392,190"></path>
+    <path d="M210,118 C300,118 320,180 392,196"></path>
+    <path d="M210,182 C300,182 330,195 392,202"></path>
+    <path d="M210,246 C300,246 330,215 392,210"></path>
+    <path d="M210,310 C300,310 320,230 392,218"></path>
+  </g>
+  <text x="300" y="140" font-size="15" fill="#C0392B" font-weight="700">w ∈ ℝ¹⁷</text>
+  <text x="300" y="160" font-size="11" fill="#555">one weight per column</text>
+  <!-- neuron -->
+  <circle cx="450" cy="204" r="58" fill="#FBEDEB" stroke="#C0392B" stroke-width="3"></circle>
+  <text x="450" y="198" text-anchor="middle" font-size="22" fill="#C0392B" font-weight="700">Σ</text>
+  <text x="450" y="222" text-anchor="middle" font-size="14" fill="#C0392B">+ b</text>
+  <!-- z -->
+  <path d="M508,204 L576,204" stroke="#8a8a85" stroke-width="2" marker-end="url(#wa)"></path>
+  <text x="542" y="194" text-anchor="middle" font-size="14" fill="#2C2C2A">z</text>
+  <!-- activation -->
+  <rect x="580" y="176" width="120" height="56" rx="8" fill="#F4F4F1" stroke="#8a8a85"></rect>
+  <text x="640" y="200" text-anchor="middle" font-size="13" fill="#2C2C2A" font-weight="600">φ(z) = z</text>
+  <text x="640" y="218" text-anchor="middle" font-size="11" fill="#555">identity activation</text>
+  <!-- yhat -->
+  <path d="M700,204 L768,204" stroke="#8a8a85" stroke-width="2" marker-end="url(#wa)"></path>
+  <rect x="772" y="176" width="96" height="56" rx="8" fill="#E8F3EE" stroke="#0E6B58"></rect>
+  <text x="820" y="200" text-anchor="middle" font-size="14" fill="#0E6B58" font-weight="700">ŷ = √dose</text>
+  <text x="820" y="218" text-anchor="middle" font-size="11" fill="#555">model output</text>
+  <!-- square back -->
+  <path d="M820,232 L820,286" stroke="#8a8a85" stroke-width="2" marker-end="url(#wa)"></path>
+  <rect x="744" y="290" width="152" height="52" rx="8" fill="#E8F3EE" stroke="#0E6B58"></rect>
+  <text x="820" y="312" text-anchor="middle" font-size="13" fill="#0E6B58" font-weight="700">dose = ŷ²</text>
+  <text x="820" y="330" text-anchor="middle" font-size="11" fill="#555">mg per week</text>
+  <text x="450" y="382" text-anchor="middle" font-size="12" fill="#555">A linear neuron: weighted sum, bias, identity activation. The back-transform is the only non-linear step.</text>
+</svg>
+<p>Using <span class="math inline">\(n\)</span> for patients and <span class="math inline">\(p = 17\)</span> for features:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Object</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(X\)</span></td>
+<td>data matrix — one <strong>row</strong> per patient, one <strong>column</strong> per feature</td>
+<td>matrix, <span class="math inline">\(n \times p\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{w}\)</span></td>
+<td>one weight per feature</td>
+<td>vector <span class="math inline">\(\in \mathbb{R}^{p}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(b\)</span></td>
+<td>bias</td>
+<td>scalar</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{y}\)</span></td>
+<td><span class="math inline">\(\sqrt{\text{dose}}\)</span> for each patient</td>
+<td>vector <span class="math inline">\(\in \mathbb{R}^{n}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>For a single patient <span class="math inline">\(i\)</span> (a scalar equation):</p>
+<p><span class="math display">\[\hat y_i = \sum_{j=1}^{p} w_j x_{ij} + b = \mathbf{w}^{\top}\mathbf{x}_i + b\]</span></p>
+<p>For every patient at once (a vector equation):</p>
+<p><span class="math display">\[\hat{\mathbf{y}} = X\mathbf{w} + b\mathbf{1} \qquad\text{shape check: } (n\times p)(p \times 1) + (n \times 1) \to (n \times 1)\ \checkmark\]</span></p>
+<p>where <span class="math inline">\(\mathbf{1} \in \mathbb{R}^{n}\)</span> is the all-ones vector, so <span class="math inline">\(b\mathbf{1}\)</span> adds the same bias to every patient.</p>
+<p>Weights live on the <strong>input wires</strong>, not on the patients. Ten thousand more patients would not add a single weight; one more feature would.</p>
+</section>
+<section id="the-loss-and-why-the-target-is-square-rooted" class="level2">
+<h2 class="anchored" data-anchor-id="the-loss-and-why-the-target-is-square-rooted">5. The loss, and why the target is square-rooted</h2>
+<section id="why-squared-error" class="level3">
+<h3 class="anchored" data-anchor-id="why-squared-error">Why squared error</h3>
+<p><span class="math display">\[\mathbf{r} = \mathbf{y} - \hat{\mathbf{y}} \in \mathbb{R}^{n}, \qquad L(\mathbf{w}, b) = \frac{1}{n}\sum_{i=1}^{n} r_i^2 = \frac{1}{n}\mathbf{r}^{\top}\mathbf{r} \quad \text{(a scalar)}\]</span></p>
+<p>MSE is not an arbitrary scoring rule. Suppose the data were generated by the line plus random noise:</p>
+<p><span class="math display">\[y_i = \mathbf{w}^{\top}\mathbf{x}_i + b + \varepsilon_i, \qquad \varepsilon_i \sim \mathcal{N}(0, \sigma^2) \text{ independently}\]</span></p>
+<p>Then the probability of observing the data we actually observed is</p>
+<p><span class="math display">\[\mathcal{L}(\mathbf{w},b) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\!\left(-\frac{r_i^2}{2\sigma^2}\right)\]</span></p>
+<p>Taking logs turns the product into a sum, and the constants drop out because they contain no <span class="math inline">\(\mathbf{w}\)</span> or <span class="math inline">\(b\)</span>:</p>
+<p><span class="math display">\[\log\mathcal{L} = -\frac{n}{2}\log(2\pi\sigma^2) \;-\; \frac{1}{2\sigma^2}\sum_{i=1}^{n} r_i^2
+\qquad\Longrightarrow\qquad
+\arg\max_{\mathbf{w},b} \log\mathcal{L} = \arg\min_{\mathbf{w},b} \frac{1}{n}\sum_{i=1}^{n} r_i^2\]</span></p>
+<p><strong>Minimising MSE is maximum likelihood under Gaussian noise of equal spread.</strong> Choosing MSE is therefore a claim about the data: errors are bell-shaped, equally spread across patients, and independent. A different claim gives a different loss — heavy-tailed noise gives MAE, a binary outcome gives cross-entropy, count data gives a Poisson loss. The general recipe is <span class="math inline">\(\text{loss} = -\log(\text{likelihood})\)</span>.</p>
+</section>
+<section id="why-sqrttextdose" class="level3">
+<h3 class="anchored" data-anchor-id="why-sqrttextdose">Why <span class="math inline">\(\sqrt{\text{dose}}\)</span></h3>
+<p>Raw weekly doses are strongly right-skewed: the middle half of patients sit between 19.5 and 38.5 mg/week, but the maximum is 315.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Target</th>
+<th>Skewness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dose</td>
+<td><strong>2.36</strong></td>
+</tr>
+<tr class="even">
+<td>√dose</td>
+<td><strong>0.60</strong></td>
+</tr>
+<tr class="odd">
+<td>log(dose)</td>
+<td><strong>−0.40</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Both transforms remove most of the skew; log slightly overcorrects into a left tail. √dose was chosen to match the published model so the coefficients can be compared directly.</p>
+<p>Two things follow from the Gaussian story above. Because MSE <strong>squares</strong> errors, a single patient missed by 140 mg/week contributes as much as about two thousand patients missed by 3 — a long tail in the errors would dominate training. And because biological effects often act multiplicatively, high-dose patients vary more in absolute terms, breaking the equal-spread assumption. Shrinking the scale reduces both problems.</p>
+<p>This reasoning is a <em>prediction</em> about the residuals, and §7 tests it.</p>
+</section>
+</section>
+<section id="training" class="level2">
+<h2 class="anchored" data-anchor-id="training">6. Training</h2>
+<section id="the-gradient" class="level3">
+<h3 class="anchored" data-anchor-id="the-gradient">The gradient</h3>
+<p>Differentiating the loss with respect to one weight <span class="math inline">\(w_j\)</span>, holding the others fixed:</p>
+<p><span class="math display">\[\frac{\partial L}{\partial w_j}
+= \frac{1}{n}\sum_{i=1}^{n} 2\big(y_i - \textstyle\sum_k w_k x_{ik} - b\big)(-x_{ij})
+= -\frac{2}{n}\sum_{i=1}^{n} x_{ij} r_i
+= -\frac{2}{n}\,\mathbf{x}_{\cdot j}^{\top}\mathbf{r}\]</span></p>
+<p>by the chain rule: the outer square gives <span class="math inline">\(2(\cdot)\)</span>, and the only term inside containing <span class="math inline">\(w_j\)</span> is <span class="math inline">\(-w_j x_{ij}\)</span>, whose derivative is <span class="math inline">\(-x_{ij}\)</span>. The sum <span class="math inline">\(\sum_i x_{ij} r_i\)</span> is the dot product of <strong>column <span class="math inline">\(j\)</span></strong> of <span class="math inline">\(X\)</span> with the residual vector.</p>
+<p>Stacking all <span class="math inline">\(p\)</span> of these gives the gradient, and the stack is exactly a matrix-vector product:</p>
+<p><span class="math display">\[\nabla_{\mathbf{w}} L =
+\begin{bmatrix} -\frac{2}{n}\mathbf{x}_{\cdot 1}^{\top}\mathbf{r} \\ \vdots \\ -\frac{2}{n}\mathbf{x}_{\cdot p}^{\top}\mathbf{r}\end{bmatrix}
+= -\frac{2}{n} X^{\top}\mathbf{r}
+\qquad (p \times n)(n \times 1) = (p \times 1)\ \checkmark\]</span></p>
+<p><span class="math display">\[\frac{\partial L}{\partial b} = -\frac{2}{n}\mathbf{1}^{\top}\mathbf{r} \quad \text{(a scalar)}\]</span></p>
+<p>The loss is scalar-valued, so its derivative is a <strong>gradient</strong> (one entry per unknown), not a Jacobian. The update:</p>
+<p><span class="math display">\[\mathbf{w} \leftarrow \mathbf{w} - \eta\,\nabla_{\mathbf{w}} L, \qquad b \leftarrow b - \eta\,\frac{\partial L}{\partial b}\]</span></p>
+</section>
+<section id="the-code" class="level3">
+<h3 class="anchored" data-anchor-id="the-code">The code</h3>
+<p>Each line is one line of the maths above.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n, p   <span class="op">=</span> X_train.shape</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>w      <span class="op">=</span> np.zeros(p)     <span class="co"># w ∈ ℝ¹⁷</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>b      <span class="op">=</span> <span class="fl">0.0</span>             <span class="co"># scalar</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>eta    <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>losses <span class="op">=</span> []</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2000</span>):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    y_hat  <span class="op">=</span> X_train <span class="op">@</span> w <span class="op">+</span> b             <span class="co"># ŷ = Xw + b1     → ℝⁿ</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    r      <span class="op">=</span> y_train <span class="op">-</span> y_hat             <span class="co"># r = y − ŷ       → ℝⁿ</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    losses.append(np.mean(r<span class="op">**</span><span class="dv">2</span>))         <span class="co"># L = (1/n) rᵀr   → scalar</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    grad_w <span class="op">=</span> <span class="op">-</span>(<span class="dv">2</span><span class="op">/</span>n) <span class="op">*</span> (X_train.T <span class="op">@</span> r)    <span class="co"># −(2/n) Xᵀr      → ℝ¹⁷</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    grad_b <span class="op">=</span> <span class="op">-</span>(<span class="dv">2</span><span class="op">/</span>n) <span class="op">*</span> np.<span class="bu">sum</span>(r)          <span class="co"># −(2/n) 1ᵀr      → scalar</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    w      <span class="op">=</span> w <span class="op">-</span> eta <span class="op">*</span> grad_w</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    b      <span class="op">=</span> b <span class="op">-</span> eta <span class="op">*</span> grad_b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="does-it-find-the-right-answer" class="level3">
+<h3 class="anchored" data-anchor-id="does-it-find-the-right-answer">Does it find the right answer?</h3>
+<p>Gradient descent is an iterative approximation; the normal equation solves the same problem exactly. Comparing against <code>sklearn.linear_model.LinearRegression</code>, which does the latter:</p>
+<p><span class="math display">\[\max_j \left| w_j^{\text{GD}} - w_j^{\text{closed form}} \right| = 7.4 \times 10^{-15}\]</span></p>
+<p>Machine precision. The hand-written loop converged to the exact least-squares solution.</p>
+<p>Two sanity checks on the training run. At iteration 0, <span class="math inline">\(\mathbf{w} = \mathbf{0}\)</span> and <span class="math inline">\(b = 0\)</span>, so every prediction is zero, <span class="math inline">\(\mathbf{r} = \mathbf{y}\)</span>, and the loss should equal <span class="math inline">\(\overline{y^2} = 5.394^2 + 1.998 = 31.09\)</span> — which is what it printed. And the fitted bias, 5.394, equals the mean of <span class="math inline">\(\mathbf{y}\)</span>, as it must when every feature has been centred.</p>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">7. Results</h2>
+<p>All numbers below come from the <strong>1,075 held-out test patients</strong>, who were untouched during training, imputation and scaling.</p>
+<div class="grid">
+<div class="g-col-6">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Test MAE</td>
+<td><strong>8.89 mg/week</strong></td>
+</tr>
+<tr class="even">
+<td>Within 20% of true dose</td>
+<td><strong>45.1%</strong></td>
+</tr>
+<tr class="odd">
+<td>Test <span class="math inline">\(R^2\)</span></td>
+<td><strong>0.432</strong></td>
+</tr>
+<tr class="even">
+<td>Train MSE (√ scale)</td>
+<td>1.097</td>
+</tr>
+<tr class="odd">
+<td>Test MSE (√ scale)</td>
+<td>1.103</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="g-col-6">
+<p><strong>Train and test error are nearly identical</strong>, so the model is not overfitting at all — unsurprising with 17 weights and 4,296 patients. Its limitation is <strong>bias, not variance</strong>: too simple to capture everything, rather than too flexible. That is also why regularisation would not help here, and why the honest next step is more features or a non-linear model.</p>
+<p><span class="math inline">\(R^2 = 0.432\)</span> means genetics and clinical variables explain about <strong>43%</strong> of the variation in dose. The other 57% is diet (vitamin K intake), adherence, other medications, unmeasured genetic variants and measurement noise.</p>
+</div>
+</div>
+<section id="testing-the-gaussian-assumption" class="level3">
+<h3 class="anchored" data-anchor-id="testing-the-gaussian-assumption">Testing the Gaussian assumption</h3>
+<p>§5 claimed the √ transform would make the residuals more bell-shaped and more evenly spread. Checking it after fitting:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>residual skew</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>√ scale</td>
+<td><strong>0.245</strong></td>
+</tr>
+<tr class="even">
+<td>raw mg/week</td>
+<td><strong>1.222</strong></td>
+</tr>
+</tbody>
+</table>
+<div id="fig-residuals" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/residuals.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Residuals on the held-out test patients. <strong>A</strong>: the error distribution on the √ scale is close to a symmetric bell. <strong>B</strong>: on the same scale, the spread is roughly even across the range of predictions. <strong>C</strong>: in raw mg/week, the spread fans out badly with dose — the unequal variance that MSE assumes away.
+</figcaption>
+</figure>
+</div>
+<p>On the √ scale the residuals form a near-symmetric bell centred on zero. On the raw mg/week scale they are visibly right-skewed, and the residual-versus-prediction plot fans out: errors around a predicted 15 mg/week span roughly ±20, while errors around a predicted 50 span −30 to +60. That funnel is precisely the unequal spread that MSE assumes away.</p>
+<p>So the transform decision is verified rather than assumed — a decision made for a stated reason, then tested against the data.</p>
+</section>
+</section>
+<section id="comparison-with-the-published-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-with-the-published-algorithm">8. Comparison with the published algorithm</h2>
+<p>Converting the trained weights out of standardised units. If <span class="math inline">\(\tilde x_{ij} = (x_{ij} - \bar x_j)/s_j\)</span>, then substituting into <span class="math inline">\(\hat y_i = \sum_j \tilde w_j \tilde x_{ij} + \tilde b\)</span> and separating the patient-dependent terms gives</p>
+<p><span class="math display">\[w_j = \frac{\tilde w_j}{s_j}, \qquad b = \tilde b - \sum_{j=1}^{p} w_j \bar x_j\]</span></p>
+<p>Nothing about the model changes — the same predictions, re-expressed in years, centimetres and kilograms.</p>
+<p><strong>The resulting equation</strong> (output is √dose in mg/week; every indicator is 0 or 1; the reference patient is White, VKORC1 G/G, CYP2C9 *1/*1, on no interacting drugs):</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sqrt{\text{dose}} = \;&amp; 5.483 \\
+&amp;- 0.2390 \times \text{age in decades} \\
+&amp;+ 0.00847 \times \text{height (cm)} \;+\; 0.01339 \times \text{weight (kg)} \\
+&amp;- 0.8403 \times \text{VKORC1 A/G} \;-\; 1.5895 \times \text{VKORC1 A/A} \;-\; 0.6567 \times \text{VKORC1 unknown} \\
+&amp;- 0.4783 \times \text{CYP2C9 *1/*2} \;-\; 0.8906 \times \text{*1/*3} \;-\; 1.1489 \times \text{*2/*2} \\
+&amp;\qquad - 1.8309 \times \text{*2/*3} \;-\; 2.1401 \times \text{*3/*3} \;-\; 0.4026 \times \text{CYP2C9 unknown} \\
+&amp;- 0.3139 \times \text{Asian} \;-\; 0.1097 \times \text{Black or African American} \;-\; 0.1656 \times \text{race unknown} \\
+&amp;+ 1.0554 \times \text{enzyme inducer} \;-\; 0.6221 \times \text{amiodarone}
+\end{aligned}
+\]</span></p>
+<p>Two structures fall out of the fitted numbers that nobody put in:</p>
+<p><strong>The CYP2C9 coefficients order themselves by enzyme impairment.</strong> *1/*2 (−0.48) → *1/*3 (−0.89) → *2/*2 (−1.15) → *2/*3 (−1.83) → *3/*3 (−2.14). The *3 allele impairs the enzyme more than *2, and two impaired copies more than one. The model was given six unrelated 0/1 columns and recovered that ordering from the data alone.</p>
+<p><strong>VKORC1 is additive.</strong> <span class="math inline">\(-1.589 \approx 2 \times (-0.840)\)</span>: two copies of the A allele lower the dose about twice as much as one. This is testable only because each genotype was given its own free weight — an allele-count encoding would have assumed it.</p>
+<p>Every coefficient sign matches the pharmacology: older patients need less, bigger patients need more, impaired metabolism needs less, enzyme inducers need more, amiodarone (a CYP2C9 inhibitor) needs less.</p>
+</section>
+<section id="try-it" class="level2">
+<h2 class="anchored" data-anchor-id="try-it">9. Try it</h2>
+<div id="warf" style="border:1px solid #d8d8d3;border-radius:12px;padding:20px;background:#FAFAF8;font-family:Inter,'Helvetica Neue',Arial,sans-serif">
+  <div style="background:#FBEDEB;border:1px solid #C0392B;border-radius:8px;padding:10px 14px;margin-bottom:18px;font-size:13px;color:#7a2318">
+    <strong>Demonstration only.</strong> This is a reproduction of a research algorithm and must not be used to dose a patient.
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px">
+    <label style="font-size:13px;font-weight:600;color:#2C2C2A">Age
+      <select id="wf-age" style="width:100%;padding:7px;margin-top:4px;font-size:14px;border:1px solid #c5c5c0;border-radius:6px;background:#fff">
+        <option value="1">10–19</option><option value="2">20–29</option>
+        <option value="3">30–39</option><option value="4">40–49</option>
+        <option value="5">50–59</option><option value="6" selected="">60–69</option>
+        <option value="7">70–79</option><option value="8">80–89</option>
+        <option value="9">90+</option>
+      </select>
+    </label>
+
+    <label style="font-size:13px;font-weight:600;color:#2C2C2A">Height (cm)
+      <input id="wf-ht" type="number" value="168" min="100" max="230" step="1" style="width:100%;padding:7px;margin-top:4px;font-size:14px;border:1px solid #c5c5c0;border-radius:6px;background:#fff">
+    </label>
+
+    <label style="font-size:13px;font-weight:600;color:#2C2C2A">Weight (kg)
+      <input id="wf-wt" type="number" value="75" min="25" max="250" step="1" style="width:100%;padding:7px;margin-top:4px;font-size:14px;border:1px solid #c5c5c0;border-radius:6px;background:#fff">
+    </label>
+
+    <label style="font-size:13px;font-weight:600;color:#2C2C2A">VKORC1 −1639 G&gt;A
+      <select id="wf-vk" style="width:100%;padding:7px;margin-top:4px;font-size:14px;border:1px solid #c5c5c0;border-radius:6px;background:#fff">
+        <option value="GG" selected="">G/G</option>
+        <option value="AG">A/G</option>
+        <option value="AA">A/A</option>
+        <option value="UN">Not genotyped</option>
+      </select>
+    </label>
+
+    <label style="font-size:13px;font-weight:600;color:#2C2C2A">CYP2C9 genotype
+      <select id="wf-cyp" style="width:100%;padding:7px;margin-top:4px;font-size:14px;border:1px solid #c5c5c0;border-radius:6px;background:#fff">
+        <option value="11" selected="">*1/*1 (normal)</option>
+        <option value="12">*1/*2</option>
+        <option value="13">*1/*3</option>
+        <option value="22">*2/*2</option>
+        <option value="23">*2/*3</option>
+        <option value="33">*3/*3</option>
+        <option value="UN">Not genotyped / other</option>
+      </select>
+    </label>
+
+    <label style="font-size:13px;font-weight:600;color:#2C2C2A">Race (as recorded in the study)
+      <select id="wf-race" style="width:100%;padding:7px;margin-top:4px;font-size:14px;border:1px solid #c5c5c0;border-radius:6px;background:#fff">
+        <option value="W" selected="">White</option>
+        <option value="A">Asian</option>
+        <option value="B">Black or African American</option>
+        <option value="U">Unknown</option>
+      </select>
+    </label>
+  </div>
+
+  <div style="margin-top:16px;display:flex;gap:22px;flex-wrap:wrap;font-size:14px;color:#2C2C2A">
+    <label style="display:flex;align-items:center;gap:7px">
+      <input id="wf-ind" type="checkbox"> Taking carbamazepine, phenytoin or rifampin
+    </label>
+    <label style="display:flex;align-items:center;gap:7px">
+      <input id="wf-amio" type="checkbox"> Taking amiodarone
+    </label>
+  </div>
+
+  <div style="margin-top:20px;padding:18px;background:#fff;border:1px solid #d8d8d3;border-radius:10px">
+    <div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#6B6B66">Predicted stable dose</div>
+    <div style="display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-top:6px">
+      <div><span id="wf-week" style="font-size:36px;font-weight:700;color:#0E6B58">—</span>
+        <span style="font-size:15px;color:#555"> mg / week</span></div>
+      <div><span id="wf-day" style="font-size:22px;font-weight:600;color:#2C2C2A">—</span>
+        <span style="font-size:13px;color:#555"> mg / day</span></div>
+    </div>
+    <div id="wf-sqrt" style="font-size:12px;color:#6B6B66;margin-top:8px;font-family:ui-monospace,Menlo,monospace"></div>
+    <div id="wf-warn" style="font-size:13px;color:#8a5a00;margin-top:10px"></div>
+    <div style="font-size:12px;color:#6B6B66;margin-top:12px;border-top:1px solid #eee;padding-top:10px">
+      Typical error on held-out patients: <strong>±8.9 mg/week</strong>. Only 45% of predictions land within 20% of the true dose.
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var W = {
+    age: -0.239044, ht: 0.008468, wt: 0.013385,
+    vk_AG: -0.840270, vk_AA: -1.589454, vk_UN: -0.656656,
+    cyp12: -0.478306, cyp13: -0.890643, cyp22: -1.148874,
+    cyp23: -1.830932, cyp33: -2.140105, cypUN: -0.402627,
+    race_A: -0.313932, race_B: -0.109701, race_U: -0.165557,
+    inducer: 1.055443, amio: -0.622104, b: 5.482983
+  };
+  var RANGE = { ht: [145.5, 190.5], wt: [42.0, 145.5] };
+
+  function el(id) { return document.getElementById(id); }
+
+  function predict() {
+    var age = parseFloat(el('wf-age').value);
+    var ht  = parseFloat(el('wf-ht').value);
+    var wt  = parseFloat(el('wf-wt').value);
+    if (!isFinite(ht) || !isFinite(wt)) { return; }
+
+    var z = W.b + W.age * age + W.ht * ht + W.wt * wt;
+
+    var vk = el('wf-vk').value;
+    if (vk === 'AG') z += W.vk_AG;
+    else if (vk === 'AA') z += W.vk_AA;
+    else if (vk === 'UN') z += W.vk_UN;
+
+    var cy = el('wf-cyp').value;
+    if (cy === '12') z += W.cyp12;
+    else if (cy === '13') z += W.cyp13;
+    else if (cy === '22') z += W.cyp22;
+    else if (cy === '23') z += W.cyp23;
+    else if (cy === '33') z += W.cyp33;
+    else if (cy === 'UN') z += W.cypUN;
+
+    var rc = el('wf-race').value;
+    if (rc === 'A') z += W.race_A;
+    else if (rc === 'B') z += W.race_B;
+    else if (rc === 'U') z += W.race_U;
+
+    if (el('wf-ind').checked)  z += W.inducer;
+    if (el('wf-amio').checked) z += W.amio;
+
+    var dose = z > 0 ? z * z : 0;
+
+    el('wf-week').textContent = dose.toFixed(1);
+    el('wf-day').textContent  = (dose / 7).toFixed(1);
+    el('wf-sqrt').textContent = 'model output  ŷ = ' + z.toFixed(3) + '  →  dose = ŷ² = ' + dose.toFixed(1);
+
+    var warn = [];
+    if (ht < RANGE.ht[0] || ht > RANGE.ht[1]) warn.push('height');
+    if (wt < RANGE.wt[0] || wt > RANGE.wt[1]) warn.push('weight');
+    if (z <= 0) warn.push('the linear predictor went negative, which is outside anything the model saw');
+    el('wf-warn').innerHTML = warn.length
+      ? '⚠️ Extrapolation: ' + warn.join(' and ') + ' lies outside the range of the training patients, so this prediction is unreliable.'
+      : '';
+  }
+
+  ['wf-age','wf-ht','wf-wt','wf-vk','wf-cyp','wf-race','wf-ind','wf-amio'].forEach(function (id) {
+    var e = el(id);
+    if (e) { e.addEventListener('input', predict); e.addEventListener('change', predict); }
+  });
+  predict();
+})();
+</script>
+<p>Things worth trying: switch VKORC1 from G/G to A/A and watch the dose roughly halve — that single gene is the strongest predictor in the model. Set CYP2C9 to *3/*3 as well and the predicted dose collapses, which is exactly the patient most at risk of bleeding on a standard starting dose. Then set both genotypes to “not genotyped” and see the model hedge back toward the middle.</p>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">10. Limitations</h2>
+<p><strong>It is not clinically usable.</strong> Beyond being a reproduction, the model predicts a <em>stable</em> dose; real dosing also requires a loading strategy and INR monitoring.</p>
+<p><strong>It explains 43% of the variation.</strong> More than half of what determines a warfarin dose is not in this dataset — vitamin K intake, adherence, liver function, other drugs, and genetic variants that were not measured.</p>
+<p><strong>Race is used as a feature, and that deserves scrutiny.</strong> It is included here because the published algorithm includes it, and it carries real predictive signal. But race is a social category standing in, imperfectly, for genetic ancestry and for environmental factors. The consequence is that model accuracy differs across populations, and the IWPC cohort was predominantly White and Asian. A later follow-up found a variant (rs12777823) that substantially improved dose prediction in African-American patients and is not in this model at all. A better version would use measured ancestry or additional variants instead of a race checkbox; comparing a model with and without the race terms is a natural next experiment.</p>
+<p><strong>Two coefficients rest on very few patients.</strong> Only about 55 of 5,371 patients were on an enzyme inducer (carbamazepine 27, phenytoin 24, rifampin 4), so the +1.06 inducer weight is imprecise. The same applies to CYP2C9 *3/*3 (19 patients).</p>
+<p><strong>The medication fields were assumed, not observed.</strong> About 57% of medication entries were blank and were treated as “not taking”. If instead some sites simply never recorded these fields, that assumption is wrong for those patients.</p>
+<p><strong>Missing genotypes were given their own category.</strong> The “unknown” weight is not biology; it is the average effect among patients whose genotype was not recorded, and it may also absorb differences between the sites that did and did not genotype.</p>
+<p><strong>The test set measures one split.</strong> A single 80/20 split with a fixed seed gives one estimate; cross-validation would give a confidence interval around it.</p>
+</section>
+<section id="code-and-sources" class="level2">
+<h2 class="anchored" data-anchor-id="code-and-sources">11. Code and sources</h2>
+<ul>
+<li>Notebook: <code>notebooks/01-warfarin-regression.ipynb</code> in <a href="https://github.com/michaelaconnors/ml-life-sciences">this site’s repository</a></li>
+<li>Data: <a href="https://www.clinpgx.org/downloads">ClinPGx downloads</a> → <em>From Related Projects</em> → International Warfarin Pharmacogenetics Consortium. The data are not covered by the ClinPGx data usage agreement and are not redistributed here.</li>
+<li>International Warfarin Pharmacogenetics Consortium. <em>Estimation of the warfarin dose with clinical and pharmacogenetic data.</em> New England Journal of Medicine, 2009. PMID: 19228618.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/michaelaconnors\.github\.io\/ml-life-sciences\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

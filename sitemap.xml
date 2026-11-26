@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://michaelaconnors.github.io/ml-life-sciences/notebooks/01-linear-regression.html</loc>
+    <lastmod>2026-11-26T04:35:35.817Z</lastmod>
+  </url>
+  <url>
     <loc>https://michaelaconnors.github.io/ml-life-sciences/concept-map.html</loc>
     <lastmod>2026-11-24T03:01:42.085Z</lastmod>
   </url>
@@ -11,5 +15,9 @@
   <url>
     <loc>https://michaelaconnors.github.io/ml-life-sciences/about.html</loc>
     <lastmod>2026-11-24T01:53:15.763Z</lastmod>
+  </url>
+  <url>
+    <loc>https://michaelaconnors.github.io/ml-life-sciences/warfarin.html</loc>
+    <lastmod>2026-11-26T19:20:12.015Z</lastmod>
   </url>
 </urlset>
